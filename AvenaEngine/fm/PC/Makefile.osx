@@ -1,13 +1,17 @@
-CC = clang
 #LIBS = -lSDL2 -lSDL2main
-OBJS = main.c
-TARGET = sdl
 #clang -v main.c -I/opt/homebrew/include -L/opt/homebrew/lib -lSDL2 -o main.o
 #SDL2FLAGS=`pkg-config --cflags sdl2`
 #SDL2LIBS=`pkg-config --libs sdl2` 
 
+CC = clang
+CFLAGS += -D__PC__=1 -D__DEBUG__=1
+TARGET := $(GAME_NAME)
+OBJS := render.o ctrl.o mesh.o obj.o \
+		pngloader.o aabb.o audio.o timer.o \
+		md2.o vec3.o $(OBJ)
+
 INC = -I/opt/homebrew/include 
-LIB = -L/opt/homebrew/lib -lSDL2
+LIB = -L/opt/homebrew/lib -lSDL2 -lGL -lm -lpng
 
 all: $(TARGET)
 	$(CC) -v $(INC) $(LIB) $(OBJS) -o $(TARGET) $(LIBS) 
