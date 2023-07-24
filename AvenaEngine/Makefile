@@ -61,9 +61,15 @@ psvrun:
 	cp -rf Assets $(PSV)
 	cd $(PSV) && $(MAKE) -f Makefile.psv run
 ifeq ($(OS), Windows_NT)
-
-
-
+pc:
+	cp -rf Assets $(PC)/GAME
+	cd $(PC) && make.exe -f Makefile.win
+pcclean: 
+	rm -f $(OBJ)
+	cd $(PC) && make.exe -f Makefile.win clean
+pcrun:
+	cp -rf Assets $(PC)/GAME
+	cd $(PC) && make.exe -f Makefile.win run	
 else
 
 UNAME_S := $(shell uname -s)
