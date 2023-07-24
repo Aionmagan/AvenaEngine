@@ -14,10 +14,10 @@ INC = -I/opt/homebrew/include
 LIB = -L/opt/homebrew/lib -lSDL2 -lGL -lm -lpng
 
 all: $(TARGET)
-	$(CC) -v $(INC) $(LIB) $(OBJS) -o $(TARGET) $(LIBS) 
+	$(CC) -v $(OBJS) $(INC) $(LIB) -o $(TARGET) $(LIBS) 
 
 $(TARGET): $(OBJS)
-	$(CC) -v $(INC) $(LIB) $(OBJS) -o $(TARGET) $(LIBS) 
+	$(CC) -v $(OBJS) $(INC) $(LIB) -o $(TARGET) $(LIBS) 
 
 clean: 
 	rm -f $(TARGET)
