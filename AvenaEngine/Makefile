@@ -65,7 +65,9 @@ ifeq ($(OS), Windows_NT)
 
 
 else
-ifeq $(detected_OS),Darwin
+
+UNAME_S := $(shell uname -s)
+ifeq $(UNAME_S),Darwin
 pc:
 	cp -rf Assets $(PC)
 	cd $(PC) && $(MAKE) -f Makefile.osx
