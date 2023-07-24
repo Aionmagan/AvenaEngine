@@ -1,0 +1,19 @@
+TARGET := $(GAME_NAME)
+OBJS := ctrl.o render.o mesh.o obj.o pngloader.o aabb.o audio.o timer.o $(OBJ)
+
+CFLAGS = -O2 -Wall -D__PSP__=1
+ASFLAGS = $(CFLAGS)
+
+LIBS = -lpng -lz -lpspgum -lpspgu
+
+EXTRA_TARGETS = EBOOT.PBP
+PSP_EBOOT_TITLE = Top Classic Plaigarized
+PSP_EBOOT_ICON = psp_sys/icon0.png
+PSP_EBOOT_PIC1 = psp_sys/pic1.png
+
+PSPSDK=$(shell psp-config --pspsdk-path)
+include $(PSPSDK)/lib/build.mak
+
+run: $(FINAL_TARGET)
+	echo $(OBJ)
+	flatpak run org.ppsspp.PPSSPP ~/Desktop/tmpCodes/port_carGame/fm/PSP/$(TARGET).elf

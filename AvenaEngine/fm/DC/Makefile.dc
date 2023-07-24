@@ -1,0 +1,37 @@
+TARGET := $(GAME_NAME)
+
+# List all of your C files here, but change the extension to ".o"
+# Include "romdisk.o" if you want a rom disk.
+OBJS := render.o ctrl.o mesh.o obj.o \
+		pngloader.o aabb.o audio.o timer.o \
+		md2.o vec3.o $(OBJ)
+
+       
+KOS_ROMDISK_DIR = romdisk
+
+KOS_CFLAGS += -std=c99 -D__DC__=1 -O2
+#KOS_CFLAGS += -fpermissive
+# The rm-elf step is to remove the target before building, to force the
+# re-creation of the rom disk.
+all: rm-elf $(TARGET)
+
+include $(KOS_BASE)/Makefile.rules
+
+clean:
+	-rm -f $(TARGET) $(OBJS) romdisk.*
+
+rm-elf:
+	-rm -f $(TARGET) romdisk.*
+
+$(TARGET): $(OBJS) romdisk.o
+	$(KOS_CC) $(KOS_CFLAGS)   $(KOS_LDFLAGS) -o $(TARGET) $(KOS_START) \
+		$(OBJS) romdisk.o $(OBJEXTRA) -lpng -lkosutils -lGLdc -lm -lz $(KOS_LIBS)
+
+run: $(TARGET)
+	echo qwer | sudo -kS /opt/toolchains/dc/bin/dc-tool-ser -t /dev/ttyUSB0 -b 1500000 -x $(TARGET)
+
+runemu:$(TARGET)
+	lxdream $(TARGET)
+dist:
+	rm -f $(OBJS)
+	$(KOS_STRIP) $(TARGET)
