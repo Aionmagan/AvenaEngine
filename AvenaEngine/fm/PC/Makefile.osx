@@ -11,7 +11,7 @@ OBJS := render.o ctrl.o mesh.o obj.o \
 		md2.o vec3.o $(OBJ)
 
 INC = -I/opt/homebrew/include 
-LIB = -L/opt/homebrew/lib -lSDL2 -lGL -lm -lpng
+LIB = -L/opt/homebrew/lib -lSDL2 -lm -lpng
 
 all: $(TARGET)
 	$(CC) -v $(OBJS) $(INC) $(LIB) -o $(TARGET)
