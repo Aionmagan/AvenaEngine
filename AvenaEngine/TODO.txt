@@ -1,0 +1,14 @@
+##IMPLEMENTS: 
+	full controller support and trigger for both DC PC 
+	floor shadows (dark circle that follows players)
+    
+##BUGS: 
+	PSvita renderer not working 
+	implement MD2 animations for ps vita 
+    atan2 wrap around not working 
+    vv_lerp causing imprecisions 
+    make most parameters pointers 
+    
+##GAMEIDEAS 
+	pit falls 
+	spike walls

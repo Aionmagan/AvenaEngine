@@ -1,0 +1,14 @@
+#ifndef __PLAYER_H__
+#define __PLAYER_H__
+
+#include "../fm/obj.h"
+#include "../fm/pngloader.h" 
+
+#define MAX_CH 11
+
+void player_init();
+void player_start(); 
+void player_update(); 
+objmd2_t* player_get_obj(); 
+objmd2_t* ch_get_obj(int i); 
+#endif//__PLAYER_H__
