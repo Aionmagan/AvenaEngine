@@ -1,0 +1,22 @@
+CC = clang
+#LIBS = -lSDL2 -lSDL2main
+OBJS = main.c
+TARGET = sdl
+#clang -v main.c -I/opt/homebrew/include -L/opt/homebrew/lib -lSDL2 -o main.o
+#SDL2FLAGS=`pkg-config --cflags sdl2`
+#SDL2LIBS=`pkg-config --libs sdl2` 
+
+INC = -I/opt/homebrew/include 
+LIB = -L/opt/homebrew/lib -lSDL2
+
+all: $(TARGET)
+	$(CC) -v $(INC) $(LIB) $(OBJS) -o $(TARGET) $(LIBS) 
+
+$(TARGET): $(OBJS)
+	$(CC) -v $(INC) $(LIB) $(OBJS) -o $(TARGET) $(LIBS) 
+
+clean: 
+	rm -f $(TARGET)
+
+run:
+	./$(TARGET)
