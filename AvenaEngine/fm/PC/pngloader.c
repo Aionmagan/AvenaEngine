@@ -1,13 +1,15 @@
 #include "../pngloader.h" 
 
 #include <stdio.h>
+#include <stdlib.h>
+//#include <malloc.h>
 #include <png.h>
 #include <GL/gl.h>
-#include <GL/glut.h>
+//#include <GL/glut.h>
 
 
 #define CLEANUP(x) { ret = (x); goto cleanup; }
-
+typedef char uint8_t;
 
 int load_png_texture(char* filename, tex_t* tex) 
 {
