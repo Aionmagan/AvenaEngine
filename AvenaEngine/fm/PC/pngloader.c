@@ -9,7 +9,10 @@
 
 
 #define CLEANUP(x) { ret = (x); goto cleanup; }
-typedef char uint8_t;
+
+#if defined(__WIN32__)
+	typedef char uint8_t;
+#endif
 
 int load_png_texture(char* filename, tex_t* tex) 
 {
