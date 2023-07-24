@@ -60,7 +60,22 @@ psvclean:
 psvrun:
 	cp -rf Assets $(PSV)
 	cd $(PSV) && $(MAKE) -f Makefile.psv run
-	
+ifeq ($(OS), Windows_NT)
+
+
+
+else
+ifeq $(detected_OS),Darwin
+pc:
+	cp -rf Assets $(PC)
+	cd $(PC) && $(MAKE) -f Makefile.osx
+pcclean: 
+	rm -f $(OBJ)
+	cd $(PC) && $(MAKE) -f Makefile.osx clean
+pcrun:
+	cp -rf Assets $(PC)
+	cd $(PC) && $(MAKE) -f Makefile.osx run	
+else
 pc:
 	cp -rf Assets $(PC)
 	cd $(PC) && $(MAKE) -f Makefile.nix
@@ -70,4 +85,5 @@ pcclean:
 pcrun:
 	cp -rf Assets $(PC)
 	cd $(PC) && $(MAKE) -f Makefile.nix run	
-
+endif
+endif
