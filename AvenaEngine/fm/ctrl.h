@@ -15,8 +15,8 @@
 #define D_DOWN      9//SDL_SCANCODE_DOWN
 #define D_LEFT      10//SDL_SCANCODE_LEFT
 #define BTN_B       11
-#define BTN_X       0
-#define BTN_Y       0
+#define BTN_X       12
+#define BTN_Y       13
 #endif 
 
 #if defined(__DC__)

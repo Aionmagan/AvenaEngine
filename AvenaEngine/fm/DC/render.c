@@ -108,6 +108,18 @@ void render_camerav(vec4_t* pos, vec4_t* rot)
 	render_cameraf(pos->x, pos->y, pos->z, rot->x, rot->y, rot->z);
 }
 
+void render_camera_lookat(float tx, float ty, float tz, float rx, float ry, float rz, float d)
+{
+	glLoadIdentity();
+	//glTranslatef(-tx, -ty, -tz-6.0f);
+	glTranslatef(0.0f, 0.0f, -d);
+	glRotatef(-ry, 1.0f, 0.0f, 0.0f);
+	glRotatef(-rx, 0.0f, 1.0f, 0.0f);
+	//glTranslatef(tx, ty, tz);
+	glTranslatef(-tx, -ty, -tz);
+}
+
+
 void render_begin()
 {
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);

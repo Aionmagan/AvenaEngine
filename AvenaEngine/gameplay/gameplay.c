@@ -56,8 +56,8 @@ void gameplay_render()
 			render_lerp_md2(ch_get_obj(i));
 		}
 		
-		render_ui_draw(&panel); 
-		//render_tp_draw(&panel);
+		//render_ui_draw(&panel); 
+		render_tp_draw(&panel);
 		//render_bb_draw(&panel);
 	render_end(); 
 }

@@ -3,6 +3,9 @@
 
 #include <math.h>
 
+#define RAD2DEG(x) (x * 180.0f / 3.14159)
+#define DEG2RAD(x) (x * 3.14159 / 180.0f)
+
 typedef struct
 {
 	float x, y, z, w;
@@ -90,6 +93,12 @@ static float ff_lerp(float f1, float f2, float l)
 	return (f1 + l * (f2 - f1)); 
 } 
 
+static float ff_move_towards(float f1, float f2, float d)
+{
+	return (f1 + (f2-f1) * d); 
+}
+/*put in f math in the future*/
+
 static void vv_norm(vec4_t* out, vec4_t* v)
 {
 	float l = vv_length(v); 
@@ -97,6 +106,27 @@ static void vv_norm(vec4_t* out, vec4_t* v)
 	out->x = v->x/l; 
 	out->y = v->y/l; 
 	out->z = v->z/l; 
+}
+
+static void vf_mul(vec4_t* out, vec4_t* v, float f)
+{
+	out->x = v->x * f; 
+	out->y = v->y * f; 
+	out->z = v->z * f;
+}
+
+
+/*rotating vector in the Y axis*/
+static void vv_rot_y(vec4_t* out, vec4_t* v, float r)
+{
+	float c = cosf(r); 
+	float s = sinf(r); 
+	float x = c * v->x + s * v->z; 
+	float z = -s * v->x + c * v->z;
+	
+	out->x = x;
+	out->y = v->y; 
+	out->z = z;  
 }
 
 /*vector 1*/ 

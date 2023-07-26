@@ -12,7 +12,7 @@ void render_tp_draw(obj_t* obj); /*uses render_draw() but with transparency on t
 //void render_bb_draw(obj_t* obj);
 void render_draw(obj_t* obj); 
 
-//void render_camera_lookat(float tx, float ty, float tz, float rx, float lax, float lay, float laz);
+void render_camera_lookat(float tx, float ty, float tz, float rx, float ry, float rz, float d);
 //void render_fps_camera(float tx, float ty, float tz, float rx, float ry, float rz); 
 void render_lerp_md2(objmd2_t* obj);
 //void render_md2(objmd2_t* obj, int fn); 
