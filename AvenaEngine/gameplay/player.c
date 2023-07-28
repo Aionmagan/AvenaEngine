@@ -176,8 +176,8 @@ void player_update()
 	//printf("roty = %f | posz = %f | atan2() = %f\n", roty, posz, rot);
 //printf("A = %d\n", ctrl_button(A));	
 //printf("Y = %f\n", ctrl_y_axis());	
-	//render_cameraf(player.pos.x, player.pos.y+2.0f, player.pos.z+4.0f, rotx, roty, 0.0f); 
-	render_camera_lookat(player.pos.x, player.pos.y+0.7f, player.pos.z, rotx, roty, 0.0f, 3.0f);
+	render_cameraf(player.pos.x, player.pos.y+2.0f, player.pos.z+4.0f, rotx, roty, 0.0f); 
+	//render_camera_lookat(player.pos.x, player.pos.y+0.7f, player.pos.z, rotx, roty, 0.0f, 3.0f);
 	
 	
 	

@@ -4,7 +4,7 @@
 #include "../fm/obj.h"
 #include "../fm/pngloader.h" 
 
-#define MAX_CH 11
+#define MAX_CH 5
 
 void player_init();
 void player_start(); 
