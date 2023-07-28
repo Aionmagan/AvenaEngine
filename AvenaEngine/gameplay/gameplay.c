@@ -4,6 +4,7 @@
 
 #include "player.h" 
 #include "road.h" 
+#include "ui.h"
 
 obj_t panel; 
 mesh_t model; 
@@ -12,6 +13,7 @@ void gameplay_init()
 {
 	player_init(); 
 	road_init(); 
+	ui_init(); 
 	
 	load_mesh("Assets/bg.obj", &model);
 	load_png_texture("Assets/fire.png", &panel.texture); 
@@ -31,6 +33,7 @@ void gameplay_start()
 {
 	player_start(); 
 	player_update();//update once to disable aabb flag
+	ui_start();
 }
 
 void gameplay_update()
@@ -43,6 +46,7 @@ void gameplay_update()
 		//panel.pos.x = player_get_obj()->pos.x; 
 	player_update(); 
 	road_update(); 
+	ui_update();
 } 
 
 void gameplay_render()
@@ -58,6 +62,7 @@ void gameplay_render()
 		
 		//render_ui_draw(&panel); 
 		render_tp_draw(&panel);
+		render_ui_draw(ui_render()); 
 		//render_bb_draw(&panel);
 	render_end(); 
 }
