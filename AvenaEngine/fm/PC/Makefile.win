@@ -1,5 +1,5 @@
 TARGET := GAME/$(GAME_NAME)
-CC = C:MinGW\bin\mingw32-gcc.exe
+CC = C:\MinGW\bin\mingw32-gcc.exe
 
 CFLAGS += -DSDL_MAIN_HANDLED -D_WIN32__=1 -D__PC__=1 -static -static-libgcc -static-libstdc++ -IWIN/SDL/include -LWIN/SDL/lib -IWIN/PNG/include -LWIN/PNG/lib -IWIN/zlib/include -LWIN/zlib/lib
 CFLAGS += -D__DEBUG__=1 
