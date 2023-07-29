@@ -18,6 +18,7 @@ void gameplay_init()
 	chest_init();
 	spikeroll_init();
 	chest_player(&player_get_obj()->pos, &player_get_obj()->box); 
+	spikeroll_player(&player_get_obj()->box);
 	//ui_init(); 
 	
 	load_mesh("Assets/bg.obj", &model);
