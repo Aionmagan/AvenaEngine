@@ -7,7 +7,7 @@ mesh_t spikeroll_model;
 tex_t spikeroll_tex;
 vec4_t spikeroll_sca; /*for collision*/
 aabb_t* spikeroll_player_box; 
-int i; 
+int spki; 
 
 void spikeroll_init()
 {
@@ -18,7 +18,7 @@ void spikeroll_init()
 	spikeroll_sca.y = 0.5f; 
 	spikeroll_sca.z = 4.8f; 
 	
-	for(i = 0; i < MAX_SPIKEROLL; ++i)
+	for(int i = 0; i < MAX_SPIKEROLL; ++i)
 	{
 		obj_init(&spikerolls[i]);
 		spikerolls[i].model = &spikeroll_model; 
@@ -41,12 +41,12 @@ void spikeroll_start()
  
 void spikeroll_update()
 {
-	for(int i = 0; i < MAX_SPIKEROLL; ++i)
+	for(int spki = 0; spki < MAX_SPIKEROLL; ++spki)
 	{
-		spikerolls[i].rot.z += 150.0f * time_delta_time();
-		aabb_update(&spikerolls[i].box, &spikerolls[i].pos, &spikeroll_sca);
+		spikerolls[spki].rot.z += 150.0f * time_delta_time();
+		aabb_update(&spikerolls[spki].box, &spikerolls[spki].pos, &spikeroll_sca);
 		
-		aabb_hit(&spikerolls[i].box, spikeroll_player_box); 
+		aabb_hit(&spikerolls[spki].box, spikeroll_player_box); 
 	}
 }
 
