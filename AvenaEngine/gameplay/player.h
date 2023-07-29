@@ -10,5 +10,4 @@ void player_init();
 void player_start(); 
 void player_update(); 
 objmd2_t* player_get_obj(); 
-objmd2_t* ch_get_obj(int i); 
 #endif//__PLAYER_H__

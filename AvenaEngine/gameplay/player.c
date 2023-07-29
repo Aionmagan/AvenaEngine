@@ -11,9 +11,7 @@ anim_state_t anim[]=
 	{.start = 40, .end = 45, .fps = 5}, /*state 1 | run*/
 };
 
-objmd2_t player; 
-objmd2_t chs[MAX_CH];
-modelData_t* enemy; 
+objmd2_t player;  
 vec4_t dir, cdir; 
 
 float posz, roty = -20.0f, rotx = 0.0f;//-31.4f; 
@@ -27,7 +25,6 @@ float speed = 5.0f;
 void player_init()
 {
 	objmd2_init(&player, "Assets/ogro.md2", "Assets/ogrobase.png"); 
-	enemy = LoadMD2Model("Assets/doom.md2", "Assets/doom.png"); 
 	
 	cdir.z = 1.0f;
 	cdir.x = 0.0f;
@@ -45,23 +42,6 @@ void player_init()
 	//player.box.sca_offset.x = 0.3f;
 	//player.box.sca_offset.y = 0.3f; 
 	//player.box.sca_offset.z = 0.3f; 
-	
-	for(int i = 0; i < MAX_CH; ++i)
-	{
-		chs[i].model = enemy;//player.model;
-		//objmd2_init(&chs[i], "Assets/ogro.md2", "Assets/ogrobase.png");
-		chs[i].last_anim_select = 0; 
-		chs[i].anim_select = 0; 
-		chs[i].lerp = 0.0f;  
-		chs[i].anim_state = anim; 
-		chs[i].sca.x = 0.02f; 
-		chs[i].sca.y = 0.02f; 
-		chs[i].sca.z = 0.02f; 
-		chs[i].pos.z = player.pos.z - cosf(i*3+i)*1.5f;
-		chs[i].pos.y = 0.5f;
-		chs[i].pos.x = player.pos.x + sinf(i*3+i)*1.5f;  
-		chs[i].rot.x = -90.0f; 
-	}
 }
 
 void player_start()
@@ -111,21 +91,9 @@ void player_update()
 		//printf("rot.z = %f  |  %f\n", (player.rot.z+90.0f)+180, player.rot.z);
 		player.anim_select = ANIMSTATE1; 
 		
-		for(int i = 0; i < MAX_CH; ++i)
-		{
-			//chs[i].pos.x += ctrl_x_axis()*speed*time_delta_time(); 
-			//chs[i].pos.z += ctrl_y_axis()*speed*time_delta_time();
-			chs[i].rot.z = rot-90.0f; 
-			chs[i].anim_select = ANIMSTATE1; 
-		}
 	}else 
 	{
 	 	player.anim_select = ANIMSTATE0;
-	 	
-	 	for(int i = 0; i < MAX_CH; ++i)
-		{
-			chs[i].anim_select = ANIMSTATE0; 
-		}
 	}
 	
 	posz += ctrl_y_axis(); 
@@ -190,9 +158,4 @@ void player_update()
 objmd2_t* player_get_obj()
 {
 	return &player; 
-}
-
-objmd2_t* ch_get_obj(int i)
-{
-	return &chs[i]; 
 }
