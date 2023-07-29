@@ -19,11 +19,12 @@ int main(int argc, char** argv)
 	time_init(); 
 	
 	//render_bg_color(34, 75, 134); 
-	render_bg_color(0, 75, 134); 
+	//render_bg_color(0, 75, 134);
+	render_bg_color(0,0,0);
 	
  	//menu_init();
 	//mode_init(); 
-	//selectscrn_init(); 
+	selectscrn_init(); 
 	gameplay_init(); 
 	//audio_load_track("Assets/bgmusic.wav"); 
 	audio_play_track(1, 1); 
@@ -60,7 +61,7 @@ int main(int argc, char** argv)
 		//{		
 			
 			//switch(mode_get())
-			switch(2)
+			switch(1)
 			{
 				case MODE_SELECTSCRN:
 					if (mode_one_call())
