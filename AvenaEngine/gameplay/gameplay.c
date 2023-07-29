@@ -5,6 +5,7 @@
 #include "player.h" 
 #include "road.h" 
 #include "ui.h"
+#include "chest.h"
 
 obj_t panel; 
 mesh_t model; 
@@ -13,6 +14,8 @@ void gameplay_init()
 {
 	player_init(); 
 	road_init(); 
+	chest_init();
+	chest_player(&player_get_obj()->pos, &player_get_obj()->box); 
 	//ui_init(); 
 	
 	load_mesh("Assets/bg.obj", &model);
@@ -33,6 +36,7 @@ void gameplay_start()
 {
 	player_start(); 
 	player_update();//update once to disable aabb flag
+	chest_start(); 
 	//ui_start();
 }
 
@@ -46,6 +50,7 @@ void gameplay_update()
 		//panel.pos.x = player_get_obj()->pos.x; 
 	player_update(); 
 	road_update(); 
+	chest_update();
 	//ui_update();
 } 
 
@@ -59,5 +64,6 @@ void gameplay_render()
 		//render_tp_draw(&panel);
 		//render_ui_draw(ui_render()); 
 		//render_bb_draw(&panel);
+		render_draw(chest_get_obj()); 
 	render_end(); 
 }

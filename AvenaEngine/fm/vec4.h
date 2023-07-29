@@ -139,4 +139,13 @@ static vec4_t vv_one()
 	return tmp;
 }
 
+/*vector 0*/
+static void vv_zero(vec4_t* v)
+{
+	v->x=0.0f;
+	v->y=0.0f;
+	v->z=0.0f;
+	
+}
+
 #endif//__VEC4_H__
