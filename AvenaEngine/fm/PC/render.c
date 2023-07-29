@@ -18,8 +18,8 @@ int i;
 /*renderer*/
 
 /*camera*/
-float posx, posy, posz; 
-float rotx, roty, rotz; 
+//float posx, posy, posz; 
+//float rotx, roty, rotz; 
 /*camera*/
 
 void render_init(float a, float n, float f)
