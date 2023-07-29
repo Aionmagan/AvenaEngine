@@ -12,9 +12,9 @@ void road_init()
 	
 	obj_init(&road_obj); 
 	road_obj.box.is_active = 0; 
-	road_obj.sca.x = 8.0f; 
-	road_obj.sca.y = 8.0f;
-	road_obj.sca.z = 8.0f;  
+	road_obj.sca.x = 9.0f; 
+	road_obj.sca.y = 9.0f;
+	road_obj.sca.z = 9.0f;  
 	road_obj.pos.z = -15.0f; 
 }
 

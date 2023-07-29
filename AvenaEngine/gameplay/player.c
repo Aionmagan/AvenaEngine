@@ -72,7 +72,9 @@ void player_update()
 			can_jump = 0;
 		}
 	}
-	
+
+	rot = atan2(ctrl_x_axis(), ctrl_y_axis())*180/3.14159;
+	player.rot.z = rot-90.0f+cam_rot; 
 	
 	if (on_ground)
 	{
@@ -91,9 +93,6 @@ void player_update()
 			//player.pos.z += ctrl_y_axis()*speed*time_delta_time(); 
 			cdir.x = ctrl_x_axis();
 			cdir.z = ctrl_y_axis(); 
-			
-			rot = atan2(ctrl_x_axis(), ctrl_y_axis())*180/3.14159;
-			player.rot.z = rot-90.0f+cam_rot; 
 
 			vv_rot_y(&dir, &cdir, DEG2RAD(cam_rot)); 
 			
@@ -109,6 +108,13 @@ void player_update()
 			
 		 	player.anim_select = ANIMSTATE0;
 		}
+	}else 
+	{
+		if (ctrl_x_axis() != 0 || ctrl_y_axis() != 0)
+		{
+			vel.x = ctrl_x_axis()*speed*0.7f; 
+			vel.z = ctrl_y_axis()*speed*0.7f;
+		}
 	}
 	
 	//vv_add(&vel, &vel, &gra);
@@ -117,7 +123,7 @@ void player_update()
 	vel.z = vel.z + gra.z * time_delta_time();
 	vv_add(&player.pos, &player.pos, &vel);
 	//vf_mul(&vel, &vel, time_delta_time()); 
-		printf("Vel = {%f, %f, %f}\n", vel.x, vel.y, vel.z);
+		//printf("Vel = {%f, %f, %f}\n", vel.x, vel.y, vel.z);
 	//player.pos.x = player.pos.x + vel.x; 
 	//player.pos.y = player.pos.y + vel.y; 
 	//player.pos.z = player.pos.z + vel.z; 

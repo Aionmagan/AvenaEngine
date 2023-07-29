@@ -1,6 +1,6 @@
 #add ../../ to all objects files so that subfolders can find them 
 OBJ = ../../main.o ../../modes.o\
-      ../../gameplay/gameplay.o ../../gameplay/player.o ../../gameplay/road.o ../../gameplay/chest.o \
+      ../../gameplay/gameplay.o ../../gameplay/player.o ../../gameplay/road.o ../../gameplay/chest.o  ../../gameplay/spikeroll.o\
       ../../selectscrn/selectscrn.o\
       ../../mainmenu/mainmenu.o
 
