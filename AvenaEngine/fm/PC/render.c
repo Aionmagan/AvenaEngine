@@ -12,7 +12,7 @@
 SDL_Window *window;
 SDL_Surface *wsurface;  
 SDL_Surface *grid; 
-SDL_Event event;
+//SDL_Event event;
 SDL_GLContext context;  
 int i; 
 /*renderer*/
