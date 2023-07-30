@@ -4,8 +4,8 @@ int start_call = 0;
 
 void mode_init()
 {
-	modes = MODE_MAINMENU; 
-	//modes=MODE_SELECTSCRN; 
+	//modes = MODE_MAINMENU; 
+	modes=MODE_SELECTSCRN; 
 } 
 void mode_change(int flag)
 {

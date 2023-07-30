@@ -32,6 +32,7 @@ float speed = 0.3f;
 
 int on_ground; 
 int can_jump; 
+int dead = 0; 
 
 void player_init()
 {
@@ -61,9 +62,9 @@ void player_init()
 
 void player_start()
 {
- 	player.pos.z = -15.0f; 
+	player.pos.z = -15.0f; 
 	player.pos.y = 0.5f;
-	player.pos.x = -15.0f;
+	player.pos.x = -28.0f;
 }
 
 void player_update()
@@ -237,8 +238,19 @@ void player_update()
 	
 	vec4_t one_sca = {.x = 0.2f, .y = 0.3f, .z = 0.2f}; 
 	
+	if (player.box.hit)
+	{
+		
+	}
+		
 	aabb_update(&player.box, &player.pos, &one_sca);
-	
+}
+
+void player_is_alive()
+{
+	if (dead)
+		return 1; 
+	return 0;
 }
  
 objmd2_t* player_get_obj()

@@ -23,11 +23,9 @@ int main(int argc, char** argv)
 	render_bg_color(0,0,0);
 	
  	//menu_init();
-	//mode_init(); 
+	mode_init(); 
 	selectscrn_init(); 
 	gameplay_init(); 
-	audio_load_track("Assets/BGM1.wav"); 
-	audio_play_track(1, 1); 
 	
 	while(q)
 	{
@@ -59,9 +57,8 @@ int main(int argc, char** argv)
 		//printf("FPS = %f | fps = %f\n", fpsc, fps);
 		//if (fpsc > fps)
 		//{		
-			
-			//switch(mode_get())
-			switch(1)
+			//switch(1)
+			switch(mode_get())
 			{
 				case MODE_SELECTSCRN:
 					if (mode_one_call())

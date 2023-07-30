@@ -2,14 +2,16 @@
 #include "../fm/pngloader.h"
 #include "../fw.h"
 #include <stdio.h>
+
 int chest_select = 0;
+int heart_select = MAX_HEARTS-1;
 
 obj_t hearts[MAX_HEARTS]; 
 mesh_t model_ui;
 tex_t texhearts;
+tex_t texheartsblack; 
 
 obj_t chests[MAX_CHESTS];
-//mesh_t modelchests;
 tex_t texchests;
 tex_t texchestsblack;
 
@@ -17,6 +19,7 @@ void ui_init()
 {
     load_mesh("Assets/bg.obj", &model_ui);
 	load_png_texture("Assets/heart_ui.png",&texhearts); 
+	load_png_texture("Assets/heart_ui_black.png",&texheartsblack);
     load_png_texture("Assets/chest_ui_black.png",&texchestsblack); 
     load_png_texture("Assets/chest_ui.png",&texchests); 
 
@@ -54,24 +57,33 @@ void ui_start()
 
 void ui_update()
 {
-    if (ctrl_button_down(BTN_B))
-    {
-    	printf("hello\n");
-        ui_chest_taken();
-    }
+    //if (ctrl_button_down(BTN_B))
+    //{
+    	//printf("hello\n");
+        //ui_heart_taken();
+    //}
     //ui_chest_taken();
    // hearts.pos.y = storyOne.pos.y + 0.0007f;
 }
 
+void ui_heart_taken()
+{
+	printf("it's calling\n");
+	hearts[heart_select].texture = texheartsblack; 
+	heart_select--; 
+	if(heart_select < 0)
+		heart_select = 0; 
+}
+
 void ui_chest_taken()
 {
-printf("chest_select %d\n", chest_select);
     chests[chest_select].texture = texchests;
     chest_select ++;
     
     if (chest_select >= MAX_CHESTS)
         chest_select = MAX_CHESTS-1;
 }
+
 // returns hearts
 obj_t* ui_hearts_render(int i)
 {

@@ -42,12 +42,18 @@ void chest_init()
 
 void chest_start()
 {
+
 	for(int i = 0; i < MAX_CHEST; ++i)
 	{
+		obj_init(&chest[i]);
+		chest[i].model = &chest_model;
+		chest[i].texture = chest_texture;
+		chest[i].pos = chest_positions[i];
+		chest[i].sca.z = 0.2f; 
+		chest[i].sca.y = 0.2f; 
+		chest[i].sca.x = 0.2f; 
 		is_taken[i] = 0; 
-		chest[i].pos.x = 12.0f;
-		chest[i].pos.z = -15.0f;
-		chest[i].pos.y = 0.4f; 
+		aabb_update(&chest[i].box, &chest[i].pos, &chest[i].sca); 
 	}
 }
  

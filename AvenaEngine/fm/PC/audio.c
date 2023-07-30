@@ -46,6 +46,9 @@ int audio_load_track(char* file)
 		return -1; 
 	}
 	
+	if (dev_music)
+		SDL_ClearQueuedAudio(dev_music);
+		
 	dev_music = SDL_OpenAudioDevice(NULL, 0, &wav_spec, NULL, 0);
 	
 	/*queue twice for perfect loop*/ 
