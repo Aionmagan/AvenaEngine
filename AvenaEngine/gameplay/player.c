@@ -3,6 +3,8 @@
 #include "../fw.h" 
 #include "../fm/timer.h"
 #include "../fm/obj.h" 
+#include "ui.h"
+#include "../modes.h"
 #include <math.h>
 
 anim_state_t anim[]=
@@ -240,8 +242,9 @@ void player_update()
 	
 	if (player.box.hit)
 	{
-		
-	}
+		ui_heart_taken();
+		mode_change(MODE_GAMEPLAY);
+	}	
 		
 	aabb_update(&player.box, &player.pos, &one_sca);
 }
