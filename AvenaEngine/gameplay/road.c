@@ -6,15 +6,15 @@ obj_t road_obj;
 unsigned int now, start; 
 void road_init()
 {
-	load_mesh("Assets/lvlt.obj", &road_mesh);
-	load_png_texture("Assets/lvlt.png", &road_obj.texture); 
+	load_mesh("Assets/Hall_Test.obj", &road_mesh);
+	load_png_texture("Assets/Hall_Test.png", &road_obj.texture); 
 	road_obj.model = &road_mesh;
 	
 	obj_init(&road_obj); 
 	road_obj.box.is_active = 0; 
-	road_obj.sca.x = 9.0f; 
-	road_obj.sca.y = 9.0f;
-	road_obj.sca.z = 9.0f;  
+	road_obj.sca.x = 0.6f; 
+	road_obj.sca.y = 0.6f;
+	road_obj.sca.z = 0.6f;  
 	road_obj.pos.z = -15.0f; 
 }
 

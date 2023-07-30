@@ -79,6 +79,7 @@ void gameplay_render()
 		//render_ui_draw(&panel); 
 		//render_tp_draw(&panel);
 		//render_bb_draw(&panel);
-		render_draw(chest_get_obj()); 
+		for(int i = 0; i < MAX_CHEST; ++i)
+			render_draw(chest_get_obj(i)); 
 	render_end(); 
 }
