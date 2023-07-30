@@ -61,7 +61,7 @@ int main(int argc, char** argv)
 		//{		
 			
 			//switch(mode_get())
-			switch(1)
+			switch(2)
 			{
 				case MODE_SELECTSCRN:
 					if (mode_one_call())

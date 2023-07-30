@@ -7,9 +7,10 @@
 
 anim_state_t anim[]=
 {
-	{.start = 0, .end = 39, .fps = 5}, /*state 0 | idel*/ 
-	{.start = 40, .end = 45, .fps = 5}, /*state 1 | run*/
-	{.start = 100, .end = 102, .fps = 5}/*state 2 | jump*/
+	{.start = 0, .end = 2, .fps = 5}, /*state 0 | idel*/ 
+	{.start = 3, .end = 9, .fps = 10}, /*state 1 | run*/
+	{.start = 17, .end = 18, .fps = 5},/*state 2 | jump*/
+	{.start = 10, .end = 16, .fps = 10}, /*state 1 | run*/
 };
 
 objmd2_t player;  
@@ -34,16 +35,16 @@ int can_jump;
 
 void player_init()
 {
-	objmd2_init(&player, "Assets/ogro.md2", "Assets/ogrobase.png"); 
+	objmd2_init(&player, "Assets/player.md2", "Assets/ogrobase.png"); 
 	
 	cdir.z = 1.0f;
 	cdir.x = 0.0f;
 	//vv_rot_y(&dir, &cdir, DEG2RAD(0.0f));
 	cam_rot = player.rot.z;
 	
-	player.sca.x = 0.02f; 
-	player.sca.y = 0.02f;
-	player.sca.z = 0.02f;  
+	player.sca.x = 0.7f; 
+	player.sca.y = 0.7f;
+	player.sca.z = 0.7f;  
 	player.pos.z = -15.0f; 
 	player.pos.y = 0.5f;
 	player.pos.x = -15.0f;
@@ -60,7 +61,9 @@ void player_init()
 
 void player_start()
 {
-
+ 	player.pos.z = -15.0f; 
+	player.pos.y = 0.5f;
+	player.pos.x = -15.0f;
 }
 
 void player_update()
