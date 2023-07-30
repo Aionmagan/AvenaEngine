@@ -54,20 +54,23 @@ void ui_start()
 
 void ui_update()
 {
-    printf("hello\n");
-    if (ctrl_button_down(BTN_X))
+    if (ctrl_button_down(BTN_B))
     {
+    	printf("hello\n");
         ui_chest_taken();
     }
+    //ui_chest_taken();
    // hearts.pos.y = storyOne.pos.y + 0.0007f;
 }
 
 void ui_chest_taken()
 {
+printf("chest_select %d\n", chest_select);
     chests[chest_select].texture = texchests;
     chest_select ++;
-    if (chest_select > MAX_CHESTS)
-        chest_select = MAX_CHESTS;
+    
+    if (chest_select >= MAX_CHESTS)
+        chest_select = MAX_CHESTS-1;
 }
 // returns hearts
 obj_t* ui_hearts_render(int i)

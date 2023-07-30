@@ -197,7 +197,7 @@ void player_update()
 	//cam_ori.y = roty+(player.pos.z*2.5f); 
 	
 	//printf("player.pos.z = %f\n", cam_ori.y);
-	printf("camera pos = {%f, %f, %f}\n", player.pos.x, player.pos.y, player.pos.z);
+	//printf("camera pos = {%f, %f, %f}\n", player.pos.x, player.pos.y, player.pos.z);
 	
 	if (player.pos.x < -28.5f)
 		player.pos.x = -28.5f; 
