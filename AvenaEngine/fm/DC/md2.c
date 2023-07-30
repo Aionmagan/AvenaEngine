@@ -111,8 +111,8 @@ printf("malloc in line 93\n");
 	/*calculate and store the texture coordinates for the model*/
 	for(i = 0; i < modelHeader->numST; ++i)
 	{
-		model->st[i].s = (float)stPtr[i].s / 256.0f;//(float)md2Texture->width; 
-		model->st[i].t = (float)stPtr[i].t / 256.0f;//(float)md2Texture->height; 
+		model->st[i].s = (float)stPtr[i].s /(float)md2Texture->width; 
+		model->st[i].t = (float)stPtr[i].t /(float)md2Texture->height; 
 	}
 printf("malloc in line 109\n");	
 	/*allocate the list of triangle indices*/

@@ -1,7 +1,7 @@
 #ifndef __SPIKEROLL_H__
 #define __SPIKEROLL_H__
 
-#define MAX_SPIKEROLL 4
+#define MAX_SPIKEROLL 14
 #include "../fm/obj.h"
 
 void spikeroll_init();
