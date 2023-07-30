@@ -47,7 +47,7 @@ void selectscrn_update()
 
     if(title.sca.y < 0.3f && section == INIT){
         title.sca.x = title.sca.x + 0.03f; 
-        
+    }
     if(section == INIT & title.sca.y < 0.41f){
         title.sca.x = title.sca.x + 0.028f; 
 
@@ -63,6 +63,7 @@ void selectscrn_update()
 		audio_load_track("Assets/va.wav"); 
 		//audio_play_track(1, 1); 
         //load_mesh("Assets/bg.obj", &modelTitle);
+    }
     if (section == INIT & ctrl_button_down(D_RIGHT))
 	{
         section = TRANSITION;
@@ -99,7 +100,7 @@ void selectscrn_update()
 			audio_load_track("Assets/BGM1.wav"); 
 			//audio_play_track(2, 2);  
    	 	}
-
+	}
     // char buf[MAX];
   
     // gcvt(title.pos.y, 6, buf);
