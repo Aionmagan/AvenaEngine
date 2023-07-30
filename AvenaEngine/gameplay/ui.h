@@ -8,6 +8,7 @@
 void ui_init(); 
 void ui_start(); 
 void ui_update(); 
+void ui_chest_taken();
 obj_t* ui_hearts_render(int i);
 obj_t* ui_chests_render(int j);
 	
