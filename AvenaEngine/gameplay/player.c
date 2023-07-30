@@ -46,6 +46,7 @@ void player_init()
 	player.sca.z = 0.02f;  
 	player.pos.z = -15.0f; 
 	player.pos.y = 0.5f;
+	player.pos.x = -15.0f;
 	player.rot.x = -90.0f;
 	player.box.is_active = 1; 
 	player.anim_state = anim; 
@@ -73,8 +74,11 @@ void player_update()
 		}
 	}
 
-	rot = atan2(ctrl_x_axis(), ctrl_y_axis())*180/3.14159;
-	player.rot.z = rot-90.0f+cam_rot; 
+	if (ctrl_x_axis() != 0 || ctrl_y_axis() != 0)
+	{
+		rot = atan2(ctrl_x_axis(), ctrl_y_axis())*180/3.14159;
+		player.rot.z = rot-90.0f+cam_rot; 
+	}
 	
 	if (on_ground)
 	{
@@ -110,6 +114,7 @@ void player_update()
 		}
 	}else 
 	{
+		player.anim_select = ANIMSTATE2; 
 		if (ctrl_x_axis() != 0 || ctrl_y_axis() != 0)
 		{
 			vel.x = ctrl_x_axis()*speed*0.7f; 

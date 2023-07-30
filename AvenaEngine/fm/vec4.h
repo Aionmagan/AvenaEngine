@@ -95,7 +95,7 @@ static float ff_lerp(float f1, float f2, float l)
 
 static float ff_move_towards(float f1, float f2, float d)
 {
-	return (f1 + (f2-f1) * d); 
+	return (f1 + (f2-f1) * d);  
 }
 /*put in f math in the future*/
 

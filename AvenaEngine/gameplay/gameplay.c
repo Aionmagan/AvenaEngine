@@ -17,7 +17,7 @@ void gameplay_init()
 	road_init(); 
 	chest_init();
 	spikeroll_init();
-	chest_player(&player_get_obj()->pos, &player_get_obj()->box); 
+	chest_player(&player_get_obj()->pos, &player_get_obj()->box, &player_get_obj()->rot.z); 
 	spikeroll_player(&player_get_obj()->box);
 	//ui_init(); 
 	
