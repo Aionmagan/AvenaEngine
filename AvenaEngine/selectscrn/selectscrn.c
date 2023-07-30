@@ -45,31 +45,21 @@ void selectscrn_start()
 void selectscrn_update()
 {
 
-    if(title.sca.y < 0.3f && section == INIT){
-        title.sca.x = title.sca.x + 0.03f; 
-    }
     if(section == INIT & title.sca.y < 0.41f){
         title.sca.x = title.sca.x + 0.028f; 
-
 	    title.sca.y = title.sca.y + 0.02f;
     }
 
 
-    if (ctrl_button_down(BTN_A) && section == INIT)
+    if (section == INIT && ctrl_button_down(D_RIGHT))
 	{
 		printf("hello");
-        section = START;
+        section = TRANSITION;
 		//if (title.texture)
 		audio_load_track("Assets/va.wav"); 
 		//audio_play_track(1, 1); 
         //load_mesh("Assets/bg.obj", &modelTitle);
     }
-    if (section == INIT & ctrl_button_down(D_RIGHT))
-	{
-        section = TRANSITION;
-
-        
-	}
 
     if(section == TRANSITION & title.sca.y >= 0.0f & title.sca.x >= 0.0f){
         title.sca.x = title.sca.x - 0.028f; 
@@ -107,9 +97,14 @@ void selectscrn_update()
   
     // printf("buffer is: %s\n", buf);
 
-    if(section == START & title.pos.y >= -0.85f & title.pos.y < 1.0){
-        title.pos.y = title.pos.y + 0.0015f;
-    }
+    // if(section == START & title.pos.y >= -0.85f & title.pos.y < 1.0){
+    //     title.pos.y = title.pos.y + 0.0020f;
+    // }else
+   	//  	{
+	// 		mode_change(MODE_GAMEPLAY);
+	// 		audio_load_track("Assets/BGM1.wav"); 
+	// 		//audio_play_track(2, 2);  
+   	//  	}
 
 }
  
