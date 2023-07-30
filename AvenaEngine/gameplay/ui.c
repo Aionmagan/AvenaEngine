@@ -1,10 +1,11 @@
 #include "ui.h"
 #include "../fm/pngloader.h"
 #include "../fw.h"
+#include "../modes.h"
 #include <stdio.h>
 
 int chest_select = 0;
-int heart_select = MAX_HEARTS-1;
+int heart_select = MAX_HEARTS;
 
 obj_t hearts[MAX_HEARTS]; 
 mesh_t model_ui;
@@ -52,7 +53,10 @@ void ui_init()
  
 void ui_start()
 {
-
+	if(heart_select < 0)
+	{
+		mode_change(MODE_SELECTSCRN);
+	}	
 }
 
 void ui_update()
@@ -68,7 +72,6 @@ void ui_update()
 
 void ui_heart_taken()
 {
-	printf("it's calling\n");
 	hearts[heart_select].texture = texheartsblack; 
 	heart_select--; 
 	if(heart_select < 0)
