@@ -197,17 +197,41 @@ void player_update()
 	//cam_ori.y = roty+(player.pos.z*2.5f); 
 	
 	//printf("player.pos.z = %f\n", cam_ori.y);
+	printf("camera pos = {%f, %f, %f}\n", player.pos.x, player.pos.y, player.pos.z);
+	
+	if (player.pos.x < -28.5f)
+		player.pos.x = -28.5f; 
+	
+	if (player.pos.x > 28.3f)
+		player.pos.x = 28.3f; 
+	
+		
+	if (player.pos.z < -20.5f)
+		player.pos.z = -20.5f; 
+		
+	if (player.pos.z > -13.0f)
+		player.pos.z = -13.0f; 
 	
 	//if (cam_pos.y <= 5.17f)
 		//cam_pos.y = 5.17f; 
 	cam_offset.x = player.pos.x; 
 	cam_offset.y = player.pos.y + 2.0f; 
 	cam_offset.z = player.pos.z + 4.0f;
-	vv_lerp(&cam_pos, &cam_pos, &cam_offset, 0.3f); 
+	
+	if (cam_offset.x < -27.0f)
+		cam_offset.x = -27.0f; 
+		
+	if (cam_offset.x > 27.0f)
+		cam_offset.x = 27.0f; 
+	
+	if (cam_offset.z > -10.25f)
+		cam_offset.z = -10.25f;
+	//vv_lerp(&cam_pos, &cam_pos, &cam_offset, 0.3f); 
 	
 	//render_cameraf(cam_pos.x, cam_pos.y, cam_pos.z, rotx, cam_ori.y, 0.0f); 
 	//render_cameraf(cam_pos.x, cam_pos.y, cam_pos.z, rotx, -30.0f, 0.0f); 
-	render_cameraf(player.pos.x, player.pos.y+2.0f, player.pos.z+4.0f, rotx, roty, 0.0f); 
+	//render_cameraf(player.pos.x, player.pos.y+2.0f, player.pos.z+4.0f, rotx, roty, 0.0f);
+	render_cameraf(cam_offset.x, cam_offset.y, cam_offset.z, rotx, roty, 0.0f); 
 	//render_camera_lookat(player.pos.x, player.pos.y+0.7f, player.pos.z, rotx, roty, 0.0f, 3.0f);
 	
 	
