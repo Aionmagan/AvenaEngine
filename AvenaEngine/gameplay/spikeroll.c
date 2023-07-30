@@ -23,7 +23,7 @@ void spikeroll_init()
 		obj_init(&spikerolls[i]);
 		spikerolls[i].model = &spikeroll_model; 
 		spikerolls[i].texture = spikeroll_tex; 
-		spikerolls[i].pos.z = -14.0f;
+		spikerolls[i].pos.z = -20.0f;
 		spikerolls[i].pos.y = 0.8f; 
 		spikerolls[i].pos.x = 1.0f*-(i*4);
 		spikerolls[i].sca.x = 0.5f;
