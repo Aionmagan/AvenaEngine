@@ -35,7 +35,7 @@ int can_jump;
 
 void player_init()
 {
-	objmd2_init(&player, "Assets/player.md2", "Assets/ogrobase.png"); 
+	objmd2_init(&player, "Assets/manny.md2", "Assets/ogrobase.png"); 
 	
 	cdir.z = 1.0f;
 	cdir.x = 0.0f;
@@ -47,7 +47,7 @@ void player_init()
 	player.sca.z = 0.7f;  
 	player.pos.z = -15.0f; 
 	player.pos.y = 0.5f;
-	player.pos.x = -15.0f;
+	player.pos.x = -28.0f;
 	player.rot.x = -90.0f;
 	player.box.is_active = 1; 
 	player.anim_state = anim; 
@@ -197,7 +197,7 @@ void player_update()
 	//cam_ori.y = roty+(player.pos.z*2.5f); 
 	
 	//printf("player.pos.z = %f\n", cam_ori.y);
-	//printf("camera pos = {%f, %f, %f}\n", player.pos.x, player.pos.y, player.pos.z);
+	//printf("player pos = {%f, %f, %f}\n", player.pos.x, player.pos.y, player.pos.z);
 	
 	if (player.pos.x < -28.5f)
 		player.pos.x = -28.5f; 
@@ -235,7 +235,7 @@ void player_update()
 	//render_camera_lookat(player.pos.x, player.pos.y+0.7f, player.pos.z, rotx, roty, 0.0f, 3.0f);
 	
 	
-	vec4_t one_sca = {.x = 0.3f, .y = 0.3f, .z = 0.3f}; 
+	vec4_t one_sca = {.x = 0.2f, .y = 0.3f, .z = 0.2f}; 
 	
 	aabb_update(&player.box, &player.pos, &one_sca);
 	
