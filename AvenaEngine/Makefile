@@ -60,6 +60,7 @@ psvclean:
 psvrun:
 	cp -rf Assets $(PSV)
 	cd $(PSV) && $(MAKE) -f Makefile.psv run
+	
 ifeq ($(OS), Windows_NT)
 pc:
 	cp -rf Assets $(PC)/GAME

@@ -24,7 +24,7 @@ int main(int argc, char** argv)
 	
  	//menu_init();
 	//mode_init(); 
-	selectscrn_init(); 
+	//selectscrn_init(); 
 	gameplay_init(); 
 	audio_load_track("Assets/BGM1.wav"); 
 	audio_play_track(1, 1); 
