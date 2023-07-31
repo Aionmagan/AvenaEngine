@@ -38,7 +38,7 @@ int dead = 0;
 
 void player_init()
 {
-	objmd2_init(&player, "Assets/manny.md2", "Assets/ogrobase.png"); 
+	objmd2_init(&player, "Assets/manny.md2", "Assets/manny.png"); 
 	
 	cdir.z = 1.0f;
 	cdir.x = 0.0f;

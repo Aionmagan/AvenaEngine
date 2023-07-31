@@ -51,13 +51,13 @@ void selectscrn_update()
     }
 
 
-    if (section == INIT && ctrl_button_down(D_RIGHT))
+    if (section == INIT && ctrl_button_down(BTN_A))
 	{
 		printf("hello");
         section = TRANSITION;
 		//if (title.texture)
 		audio_load_track("Assets/va.wav"); 
-		//audio_play_track(1, 1); 
+		audio_play_track(2, 1); 
         //load_mesh("Assets/bg.obj", &modelTitle);
     }
 
@@ -88,7 +88,7 @@ void selectscrn_update()
    	 	{
 			mode_change(MODE_GAMEPLAY);
 			audio_load_track("Assets/BGM1.wav"); 
-			//audio_play_track(2, 2);  
+			audio_play_track(1, 1);  
    	 	}
 	}
     // char buf[MAX];

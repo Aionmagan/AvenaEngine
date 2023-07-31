@@ -75,7 +75,10 @@ void ui_heart_taken()
 	hearts[heart_select].texture = texheartsblack; 
 	heart_select--; 
 	if(heart_select < 0)
+	{
 		heart_select = 0; 
+		mode_change(MODE_SELECTSCRN);
+	}
 }
 
 void ui_chest_taken()
