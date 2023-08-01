@@ -90,6 +90,13 @@ void selectscrn_update()
 			audio_load_track("Assets/BGM1.wav"); 
 			audio_play_track(1, 1);  
    	 	}
+
+        if(ctrl_button_down(BTN_A))
+        {
+            mode_change(MODE_GAMEPLAY);
+			audio_load_track("Assets/BGM1.wav"); 
+			audio_play_track(1, 1); 
+        }
 	}
     // char buf[MAX];
   

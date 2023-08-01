@@ -7,7 +7,7 @@ SDL_Joystick* gamepad = NULL;
 SDL_Event event; 
 float x_axis = 0; 
 float y_axis = 0; 
-
+int quit = 0; 
 int keys[322];
 int btns[24];
 int skeys[322];
@@ -30,11 +30,9 @@ int gp_keys[]=
 	1, //b button
 	3, //x button 
 	2, //y button
-	
-	
 };
 
-int pc_keys[10]=
+int pc_keys[14]=
 {
 	SDL_SCANCODE_ESCAPE,
 	SDL_SCANCODE_SPACE,
@@ -46,6 +44,9 @@ int pc_keys[10]=
 	SDL_SCANCODE_RIGHT,
 	SDL_SCANCODE_DOWN,
 	SDL_SCANCODE_LEFT,
+	SDL_SCANCODE_LEFT,
+	SDL_SCANCODE_LEFT,
+	SDL_SCANCODE_E,
 }; 
 /*INDEXER ARRAY*/
 
@@ -79,6 +80,9 @@ void ctrl_update()
 	{
 		switch(event.type)
 		{
+			case SDL_QUIT:
+				quit = 1; 
+				break; 
 			case SDL_KEYDOWN: 
 				if (event.key.repeat == 0)
 					keys[event.key.keysym.scancode] = 1; 
@@ -185,7 +189,7 @@ void ctrl_update()
 
 int ctrl_event_quit()
 {
-	return (event.type == SDL_QUIT);  
+	return quit;  
 }
 
 float ctrl_x_axis()

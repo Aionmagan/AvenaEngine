@@ -26,7 +26,7 @@ void render_init(float a, float n, float f)
 {
 	SDL_Init(SDL_INIT_VIDEO | SDL_INIT_JOYSTICK | SDL_INIT_AUDIO);
 	
-	window = SDL_CreateWindow("Car Game", SDL_WINDOWPOS_CENTERED, 
+	window = SDL_CreateWindow("Avena Engine", SDL_WINDOWPOS_CENTERED, 
 										  SDL_WINDOWPOS_CENTERED, 
 										  SW, SH, SDL_WINDOW_OPENGL);
 	//SDL_SetWindowFullscreen(window, 1); 
