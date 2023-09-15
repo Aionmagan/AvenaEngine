@@ -1,2 +1,2 @@
 # AvenaEngine
-AvenaEngine a game engien for WTJ!!! 2023
+AvenaEngine a game engine for WTJ!!! 2023
