@@ -1,10 +1,10 @@
 #add ../../ to all objects files so that subfolders can find them 
 OBJ = ../../main.o ../../modes.o\
-      ../../gameplay/gameplay.o ../../gameplay/player.o ../../gameplay/road.o ../../gameplay/chest.o  ../../gameplay/spikeroll.o ../../gameplay/ui.o\
+      ../../gameplay/gameplay.o ../../gameplay/player.o ../../gameplay/road.o ../../gameplay/cheese.o  ../../gameplay/cats.o ../../gameplay/ui.o\
       ../../selectscrn/selectscrn.o\
       ../../mainmenu/mainmenu.o
 
-GAME_NAME = carGame
+GAME_NAME = RatChance
 
 export OBJ
 export GAME_NAME

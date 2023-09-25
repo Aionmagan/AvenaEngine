@@ -159,9 +159,14 @@ void render_ui_draw(obj_t* obj)
 void render_tp_draw(obj_t* obj)
 {
 	glEnable(GL_BLEND);
-	
-	render_draw(obj);
-	
+		render_draw(obj);	
+	glDisable(GL_BLEND);
+}
+
+void render_tp_md2(objmd2_t* obj)
+{
+	glEnable(GL_BLEND);
+		render_lerp_md2(obj);	
 	glDisable(GL_BLEND);
 }
 
@@ -262,6 +267,54 @@ void render_draw(obj_t* obj)
 				
 			glEnd();
 			glEnable(GL_TEXTURE_2D);
+		}else 
+		{
+			glPushMatrix();
+			glTranslatef(obj->pos.x, obj->pos.y, obj->pos.z);
+	    	glScalef(obj->sca.x, obj->sca.y, obj->sca.z); 
+	    	glRotatef(obj->rot.x, 1.0f, 0.0f, 0.0f);
+	    	glRotatef(obj->rot.y, 0.0f, 1.0f, 0.0f); 
+	    	glRotatef(obj->rot.z, 0.0f, 0.0f, 1.0f); 
+			glDisable(GL_TEXTURE_2D);
+
+			glLineWidth(2);
+			glBegin(GL_LINES);
+				
+			glColor3f(0.0f, 0.5f, 1.0f);				
+			
+			//if(obj->box.hit)
+				//glColor3f(1.0f, 0.0f, 0.0f); 
+				
+			for(i = 0; i < obj->model->face_count; ++i)
+			{
+				 glVertex3f(obj->model->verts[obj->model->faces[i].vx].x,
+							obj->model->verts[obj->model->faces[i].vx].y,
+							obj->model->verts[obj->model->faces[i].vx].z);
+							
+				 glVertex3f(obj->model->verts[obj->model->faces[i].vy].x,
+							obj->model->verts[obj->model->faces[i].vy].y,
+							obj->model->verts[obj->model->faces[i].vy].z);
+							
+				 glVertex3f(obj->model->verts[obj->model->faces[i].vy].x,
+				 		    obj->model->verts[obj->model->faces[i].vy].y,
+						    obj->model->verts[obj->model->faces[i].vy].z);
+							
+				 glVertex3f(obj->model->verts[obj->model->faces[i].vz].x,
+							obj->model->verts[obj->model->faces[i].vz].y,
+							obj->model->verts[obj->model->faces[i].vz].z);
+							
+                 glVertex3f(obj->model->verts[obj->model->faces[i].vz].x,
+							obj->model->verts[obj->model->faces[i].vz].y,
+							obj->model->verts[obj->model->faces[i].vz].z);
+						
+				 glVertex3f(obj->model->verts[obj->model->faces[i].vx].x,
+							obj->model->verts[obj->model->faces[i].vx].y,
+							obj->model->verts[obj->model->faces[i].vx].z);
+			}
+				
+			glEnd();
+			glEnable(GL_TEXTURE_2D);
+			glPopMatrix();
 		}
 #endif 
 }

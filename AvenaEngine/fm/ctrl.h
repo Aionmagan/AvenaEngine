@@ -15,8 +15,8 @@
 #define D_DOWN      9//SDL_SCANCODE_DOWN
 #define D_LEFT      10//SDL_SCANCODE_LEFT
 #define BTN_B       11
-#define BTN_X       12
-#define BTN_Y       13
+#define BTN_Y       12
+#define BTN_X       13
 #endif 
 
 #if defined(__DC__)
@@ -61,8 +61,10 @@ void ctrl_init();
 void ctrl_update();
 int ctrl_event_quit(); 
 
-float ctrl_x_axis(); //horizontal
-float ctrl_y_axis(); //vertical 
+float ctrl_x_laxis(); //horizontal
+float ctrl_y_laxis(); //vertical 
+float ctrl_x_raxis(); 
+float ctrl_y_raxis(); 
 int ctrl_button(int flag);
 int ctrl_button_down(int flag);
 //void ctrl_xaxis();

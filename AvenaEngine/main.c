@@ -22,10 +22,14 @@ int main(int argc, char** argv)
 	//render_bg_color(0, 75, 134);
 	render_bg_color(0,0,0);
 	
- 	//menu_init();
+ 	menu_init();
 	mode_init(); 
-	selectscrn_init(); 
+	//selectscrn_init(); 
 	gameplay_init(); 
+	
+	
+	audio_load_track("Assets/bg.wav"); 
+	audio_play_track(1, 1); 
 	
 	while(q)
 	{

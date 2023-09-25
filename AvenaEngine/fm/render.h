@@ -9,6 +9,7 @@ void render_cameraf(float tx, float ty, float tz, float rx, float ry, float rz);
 void render_camerav(vec4_t* pos, vec4_t* rot); 
 void render_ui_draw(obj_t* obj);
 void render_tp_draw(obj_t* obj); /*uses render_draw() but with transparency on texture*/  
+void render_tp_md2(objmd2_t* obj);
 //void render_bb_draw(obj_t* obj);
 void render_draw(obj_t* obj); 
 

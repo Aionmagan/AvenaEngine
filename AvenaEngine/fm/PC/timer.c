@@ -6,7 +6,7 @@ unsigned int new_time, old_time;
 
 void time_init()
 {
-	
+	srand(time(NULL));
 }
 
 void time_update()

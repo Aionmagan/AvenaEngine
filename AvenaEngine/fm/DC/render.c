@@ -142,6 +142,13 @@ void render_tp_draw(obj_t* obj)
 	glDisable(GL_BLEND);
 }
 
+void render_tp_md2(objmd2_t* obj)
+{
+	glEnable(GL_BLEND);
+		render_lerp_md2(obj);	
+	glDisable(GL_BLEND);
+}
+
 void render_draw(obj_t* obj)
 {
 	    glPushMatrix();

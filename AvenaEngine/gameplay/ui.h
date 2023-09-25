@@ -2,15 +2,13 @@
 #define __AUI_H__
 
 #include "../fm/obj.h"
-#define MAX_HEARTS 3
-#define MAX_CHESTS 5
+#define MAX_CHEESES 5
 
 void ui_init(); 
 void ui_start(); 
 void ui_update(); 
-void ui_heart_taken();
-void ui_chest_taken();
-obj_t* ui_hearts_render(int i);
-obj_t* ui_chests_render(int j);
+void ui_cheese_taken();
+void ui_cheese_reset(); 
+obj_t* ui_cheese_render(int i);
 	
 #endif

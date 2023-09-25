@@ -13,6 +13,17 @@ static float posx, posy, posz;
 static float rotx, roty, rotz; 
 /*camera*/
 
+/*MD2*/
+vector3_t* pointList; 
+vector3_t* nextPointList; 
+
+float x1, y1, z1; 
+float x2, y2, z2; 
+
+//modelData_t* model; 
+vector3_t vertex[3];
+/*MD2*/
+
 void render_init(float a, float n, float f)
 {
     vglInit(0x800000);
@@ -32,6 +43,8 @@ void render_init(float a, float n, float f)
     glClearColor(0.6f, 0.6f, .6f, .6f);
     glEnable(GL_DEPTH_TEST);
     glDepthFunc(GL_LEQUAL);
+    
+    glBlendFunc(GL_SRC_ALPHA,GL_ONE_MINUS_SRC_ALPHA);
     
     glEnable(GL_TEXTURE_2D);
     
@@ -78,12 +91,31 @@ void render_begin()
 }
 
 void render_ui_draw(obj_t* obj)
-{
+{	
+	glEnable(GL_BLEND);
+	
 	glPushMatrix(); 
 	glLoadIdentity(); 
 		render_draw(obj);
 	glPopMatrix(); 
+	
+	glDisable(GL_BLEND);
 }
+
+void render_tp_draw(obj_t* obj)
+{
+	glEnable(GL_BLEND);
+		render_draw(obj);	
+	glDisable(GL_BLEND);
+}
+
+void render_tp_md2(objmd2_t* obj)
+{
+	glEnable(GL_BLEND);
+		render_lerp_md2(obj);	
+	glDisable(GL_BLEND);
+}
+
 void render_draw(obj_t* obj)
 {
 	    glPushMatrix();
@@ -165,6 +197,168 @@ void render_scroll_draw(obj_t* obj, float u, float v)
 			}
 		glEnd();
 		glPopMatrix();
+}
+
+void render_lerp_md2(objmd2_t* obj)
+{
+	//model = obj->model; 
+	//vector3_t vertex[3];
+	
+	//if (fabs(obj->pos.x - posx) > 5.0f || fabs(obj->pos.z - posz) > 12.0f)
+		//return; 
+	
+		//printf("camera to point distance = %f\n",(obj->pos.z - posz));
+	
+	if (obj->last_anim_select != obj->anim_select)
+	{
+		obj->last_anim_select = obj->anim_select; 
+		obj->current_frame = obj->anim_state[obj->anim_select].start; 
+		obj->next_frame = obj->current_frame + 1; 
+	}
+
+	if (obj->lerp >= 1.0)
+	{
+		//model->interpol = 0.0f; 
+		obj->lerp = 0.0f; 
+		//model->currentFrame++; 
+		obj->current_frame++; 
+		obj->next_frame++; 
+		
+		if (obj->current_frame >= obj->anim_state[obj->anim_select].end)
+			obj->current_frame = obj->anim_state[obj->anim_select].start;  
+		
+		if (obj->next_frame >= obj->anim_state[obj->anim_select].end)
+			obj->next_frame = obj->anim_state[obj->anim_select].start;   
+		//printf("");
+		//if (model->currentFrame >= model->numFrames-2)
+			//model->currentFrame = 0; 
+			//printf("numFrames = %d\n", model->numFrames);
+		//obj->next_frame = obj->current_frame+1; 
+		//model->nextFrame = model->currentFrame+1; 
+		
+		//if (model->nextFrame >= model->numFrames-2)
+			//model->nextFrame = 0; 
+	}
+	
+	pointList = &obj->model->pointList[obj->model->numPoints * obj->current_frame];
+	nextPointList = &obj->model->pointList[obj->model->numPoints * obj->next_frame];
+	//printf("pointList[0].point[0] = %f\n",pointList[0].point[0]);
+	glPushMatrix();
+	glTranslatef(obj->pos.x, obj->pos.y, obj->pos.z);
+	glScalef(obj->sca.x, obj->sca.y, obj->sca.z); 
+	glRotatef(obj->rot.x, 1.0f, 0.0f, 0.0f);
+	glRotatef(obj->rot.y, 0.0f, 1.0f, 0.0f); 
+	glRotatef(obj->rot.z, 0.0f, 0.0f, 1.0f); 
+	
+	glBindTexture(GL_TEXTURE_2D, obj->model->modelTex.texID);
+	glBegin(GL_TRIANGLES);
+	
+		for(i = 0; i < obj->model->numTriangles; ++i)
+		{
+#if 0
+			x1 = pointList[model->triIndex[i].meshIndex[0]].point[0];
+			y1 = pointList[model->triIndex[i].meshIndex[0]].point[1];
+			z1 = pointList[model->triIndex[i].meshIndex[0]].point[2];
+			
+			x2 = nextPointList[model->triIndex[i].meshIndex[0]].point[0];
+			y2 = nextPointList[model->triIndex[i].meshIndex[0]].point[1];
+			z2 = nextPointList[model->triIndex[i].meshIndex[0]].point[2];
+			
+			vertex[0].point[0] = x1+obj->lerp * (x2 - x1);
+			vertex[0].point[1] = y1+obj->lerp * (y2 - y1); 
+			vertex[0].point[2] = z1+obj->lerp * (z2 - z1);
+			
+			
+			
+			x1 = pointList[model->triIndex[i].meshIndex[2]].point[0];
+			y1 = pointList[model->triIndex[i].meshIndex[2]].point[1];
+			z1 = pointList[model->triIndex[i].meshIndex[2]].point[2];
+			
+			x2 = nextPointList[model->triIndex[i].meshIndex[2]].point[0];
+			y2 = nextPointList[model->triIndex[i].meshIndex[2]].point[1];
+			z2 = nextPointList[model->triIndex[i].meshIndex[2]].point[2];
+			
+			vertex[2].point[0] = x1+obj->lerp * (x2 - x1);
+			vertex[2].point[1] = y1+obj->lerp * (y2 - y1);
+			vertex[2].point[2] = z1+obj->lerp * (z2 - z1);
+			
+			
+								 
+			x1 = pointList[model->triIndex[i].meshIndex[1]].point[0];
+			y1 = pointList[model->triIndex[i].meshIndex[1]].point[1];
+			z1 = pointList[model->triIndex[i].meshIndex[1]].point[2];
+			
+			x2 = nextPointList[model->triIndex[i].meshIndex[1]].point[0];
+			y2 = nextPointList[model->triIndex[i].meshIndex[1]].point[1];
+			z2 = nextPointList[model->triIndex[i].meshIndex[1]].point[2];
+			
+			vertex[1].point[0] = x1+obj->lerp * (x2 - x1);
+			vertex[1].point[1] = y1+obj->lerp * (y2 - y1);
+			vertex[1].point[2] = z1+obj->lerp * (z2 - z1);
+			
+			
+#else
+			vertex[0].point[0] = pointList[obj->model->triIndex[i].meshIndex[0]].point[0] + obj->lerp * 
+			                    (nextPointList[obj->model->triIndex[i].meshIndex[0]].point[0] - 
+			                     pointList[obj->model->triIndex[i].meshIndex[0]].point[0]);
+			                     
+			vertex[0].point[1] = pointList[obj->model->triIndex[i].meshIndex[0]].point[1] + obj->lerp * 
+								(nextPointList[obj->model->triIndex[i].meshIndex[0]].point[1] - 
+								 pointList[obj->model->triIndex[i].meshIndex[0]].point[1]); 
+								 
+			vertex[0].point[2] = pointList[obj->model->triIndex[i].meshIndex[0]].point[2] + obj->lerp * 
+								(nextPointList[obj->model->triIndex[i].meshIndex[0]].point[2] - 
+								 pointList[obj->model->triIndex[i].meshIndex[0]].point[2]);
+								 
+								 
+		   vertex[2].point[0] = pointList[obj->model->triIndex[i].meshIndex[2]].point[0] + obj->lerp * 
+			                    (nextPointList[obj->model->triIndex[i].meshIndex[2]].point[0] - 
+			                     pointList[obj->model->triIndex[i].meshIndex[2]].point[0]);
+			                     
+			vertex[2].point[1] = pointList[obj->model->triIndex[i].meshIndex[2]].point[1] + obj->lerp * 
+								(nextPointList[obj->model->triIndex[i].meshIndex[2]].point[1] - 
+								 pointList[obj->model->triIndex[i].meshIndex[2]].point[1]); 
+								 
+			vertex[2].point[2] = pointList[obj->model->triIndex[i].meshIndex[2]].point[2] + obj->lerp * 
+								(nextPointList[obj->model->triIndex[i].meshIndex[2]].point[2] - 
+								 pointList[obj->model->triIndex[i].meshIndex[2]].point[2]);
+								 
+								 
+			vertex[1].point[0] = pointList[obj->model->triIndex[i].meshIndex[1]].point[0] + obj->lerp * 
+			                    (nextPointList[obj->model->triIndex[i].meshIndex[1]].point[0] - 
+			                     pointList[obj->model->triIndex[i].meshIndex[1]].point[0]);
+			                     
+			vertex[1].point[1] = pointList[obj->model->triIndex[i].meshIndex[1]].point[1] + obj->lerp * 
+								(nextPointList[obj->model->triIndex[i].meshIndex[1]].point[1] - 
+								 pointList[obj->model->triIndex[i].meshIndex[1]].point[1]); 
+								 
+			vertex[1].point[2] = pointList[obj->model->triIndex[i].meshIndex[1]].point[2] + obj->lerp * 
+								(nextPointList[obj->model->triIndex[i].meshIndex[1]].point[2] - 
+								 pointList[obj->model->triIndex[i].meshIndex[1]].point[2]);
+#endif		 
+								 
+			glTexCoord2f(obj->model->st[obj->model->triIndex[i].stIndex[0]].s,
+						 obj->model->st[obj->model->triIndex[i].stIndex[0]].t);
+			
+			glVertex3fv(vertex[0].point);
+			//glVertex3f(vertex[0].point[0], vertex[0].point[1], vertex[0].point[2]);
+					   
+			glTexCoord2f(obj->model->st[obj->model->triIndex[i].stIndex[2]].s,
+						 obj->model->st[obj->model->triIndex[i].stIndex[2]].t);
+
+			glVertex3fv(vertex[2].point);
+			//glVertex3f(vertex[2].point[0], vertex[2].point[1], vertex[2].point[2]);
+			
+			glTexCoord2f(obj->model->st[obj->model->triIndex[i].stIndex[1]].s,
+						 obj->model->st[obj->model->triIndex[i].stIndex[1]].t);
+			
+			glVertex3fv(vertex[1].point);
+			//glVertex3f(vertex[2].point[0], vertex[2].point[1], vertex[2].point[2]);
+		}
+		glEnd();
+		glPopMatrix();
+		
+	obj->lerp += obj->anim_state[obj->anim_select].fps * time_delta_time();
 }
 
 void render_end()

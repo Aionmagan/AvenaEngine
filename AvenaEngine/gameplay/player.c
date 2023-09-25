@@ -1,4 +1,5 @@
 #include "player.h" 
+#include "ui.h"
 //#include "car_texture.h"
 #include "../fw.h" 
 #include "../fm/timer.h"
@@ -6,60 +7,69 @@
 #include "ui.h"
 #include "../modes.h"
 #include <math.h>
+ 
+#define CAMERA_VIEW_OFFSET 40.0f
+
+mesh_t collision_mesh; 
+
+mesh_t mesh_player; 
+obj_t  player;
+
+objmd2_t md2_player; 
+
+int dead = 0; 
+float cspeed = 80.0f; 
+
+vec4_t starting_pos; 
+vec4_t pos; 
+vec4_t rot; 
+vec4_t lastPos; 
+vec4_t box_sca = {3.0f, 3.0f, 3.0f};
+
+vec4_t fpsrot; 
+vec4_t fpspos; 
 
 anim_state_t anim[]=
 {
-	{.start = 0, .end = 2, .fps = 5}, /*state 0 | idel*/ 
-	{.start = 3, .end = 9, .fps = 10}, /*state 1 | run*/
-	{.start = 17, .end = 18, .fps = 5},/*state 2 | jump*/
-	{.start = 10, .end = 16, .fps = 10}, /*state 1 | run*/
+	{.start = 0, .end = 9, .fps = 5}, /*state 0 | idel*/ 
+	{.start = 10, .end = 30, .fps = 50}, /*state 1 | run*/
+	//{.start = 17, .end = 18, .fps = 5},/*state 2 | jump*/
+	// {.start = 10, .end = 16, .fps = 10}, /*state 1 | run*/
 };
-
-objmd2_t player;  
-
-vec4_t dir, cdir; 
-vec4_t cam_offset; 
-vec4_t cam_ori;
-vec4_t cam_pos;  
-vec4_t vel ={0}; 
-vec4_t gra ={.x=0, .y=-2.87f, .z=0};
-
-float posz, roty = -13.0f, rotx = 0.0f;//-31.4f; 
-float rot, crotx; 
-float cam_rot; 
-float cam_target_rot;
-
-float center_cam = 0; 
-float speed = 0.3f; 
-
-int on_ground; 
-int can_jump; 
-int dead = 0; 
 
 void player_init()
 {
-	objmd2_init(&player, "Assets/manny.md2", "Assets/manny.png"); 
+	//load_mesh("Assets/rat.obj", &mesh_player);
+	//load_png_texture("Assets/rat.png", &player.texture); 
 	
-	cdir.z = 1.0f;
-	cdir.x = 0.0f;
-	//vv_rot_y(&dir, &cdir, DEG2RAD(0.0f));
-	cam_rot = player.rot.z;
+	load_mesh("Assets/meshCollider.obj", &collision_mesh);
 	
-	player.sca.x = 0.7f; 
-	player.sca.y = 0.7f;
-	player.sca.z = 0.7f;  
-	player.pos.z = -15.0f; 
-	player.pos.y = 0.5f;
-	player.pos.x = -28.0f;
-	player.rot.x = -90.0f;
-	player.box.is_active = 1; 
-	player.anim_state = anim; 
+	objmd2_init(&md2_player, "Assets/rat.md2", "Assets/rat.png"); 
+	md2_player.anim_state = anim; 
 	
-	on_ground = 0; 
-	can_jump = 0; 
-	//player.box.sca_offset.x = 0.3f;
-	//player.box.sca_offset.y = 0.3f; 
-	//player.box.sca_offset.z = 0.3f; 
+	md2_player.rot.x = -90.0f;
+	md2_player.rot.z = -90.0f; 
+	
+	//player.model = &mesh_player; 
+	
+	//camera
+	pos.y = 82.0f; 
+	pos.z = 60.0f; 
+	rot.y = -60.0f; 
+	
+	
+    starting_pos.x = -0.5f; 
+	starting_pos.y = 3.0f; 
+	starting_pos.z = 150.0f; 
+	//obj_init(&player);
+	//player.box.is_active = 1;
+	//md2_player.pos.x = 23.0f;
+	//md2_player.pos.y = 3.0f; 
+	//md2_player.pos.z = 13.0f; 
+	
+	md2_player.pos = starting_pos; 
+	
+	lastPos = md2_player.pos; 
 }
 
 void player_start()
@@ -71,192 +81,141 @@ void player_start()
 
 void player_update()
 { 
-	if (ctrl_button_down(BTN_A))
-	{
-		if (can_jump)
-		{
-			vel.y = 0.8f; 
-			can_jump = 0;
-		}
-	}
-
-	if (ctrl_x_axis() != 0 || ctrl_y_axis() != 0)
-	{
-		rot = atan2(ctrl_x_axis(), ctrl_y_axis())*180/3.14159;
-		player.rot.z = rot-90.0f+cam_rot; 
-	}
+	float s = cspeed * time_delta_time();// * time_delta_ti me(); 	
+	int ct = 0; 
+	vec4_t dir={0}; 
+	//printf("Player {%f, %f, %f}\n", md2_player.pos.x, md2_player.pos.y, md2_player.pos.z); 
 	
-	if (on_ground)
-	{
-		if (ctrl_x_axis() != 0 || ctrl_y_axis() != 0)
-		{ 	
-			//vf_mul(&vel, &vel, time_delta_time());
-			//vv_add(&player.pos, &player.pos, &vel);
+	if (!ctrl_button(BTN_A))
+	{			
+		//md2_player.pos.z += ctrl_y_laxis() * s; 
+		//md2_player.pos.x += ctrl_x_laxis() * s; 
 		
-			vel.x = ctrl_x_axis()*speed; 
-			vel.z = ctrl_y_axis()*speed;
+		dir.z += ctrl_y_laxis(); 
+		dir.x += ctrl_x_laxis(); 
+		
+		vv_norm(&dir, &dir); 
+		
+		md2_player.pos.z += dir.z * s; 
+		md2_player.pos.x += dir.x * s; 
+		
+	    if (ctrl_x_laxis() != 0 || ctrl_y_laxis() != 0)
+		{
+			float r = RAD2DEG(atan2(ctrl_x_laxis(), ctrl_y_laxis()));
+			md2_player.rot.z = r+90.0f; 
 			
-			
+			md2_player.anim_select = ANIMSTATE1;
+		}else{
+#if defined(__PSV__)
+			md2_player.anim_select = ANIMSTATE1; 
+#else
+			md2_player.anim_select = ANIMSTATE0;
+#endif						
+		}
+		
+		ct = mesh_collision(&md2_player.pos, &collision_mesh);
 
-			
-			//player.pos.x += ctrl_x_axis()*speed*time_delta_time(); 
-			//player.pos.z += ctrl_y_axis()*speed*time_delta_time(); 
-			cdir.x = ctrl_x_axis();
-			cdir.z = ctrl_y_axis(); 
-
-			vv_rot_y(&dir, &cdir, DEG2RAD(cam_rot)); 
-			
-			vf_mul(&dir, &dir, speed*time_delta_time());
-			
-			vv_add(&player.pos, &player.pos, &dir);
-			
-			//printf("rot.z = %f  |  %f\n", (player.rot.z+90.0f)+180, player.rot.z);
-			player.anim_select = ANIMSTATE1; 
-			
+		if (ct)
+		{
+			lastPos = md2_player.pos; 
 		}else 
 		{
-			
-		 	player.anim_select = ANIMSTATE0;
+			md2_player.pos = lastPos; 
+		}	
+		
+		//pos.z = player.pos.z + 47.0f; 
+		//pos.x = player.pos.x; 
+		
+		
+	    if (ctrl_x_raxis() != 0 || ctrl_y_raxis() != 0)
+	    {
+			pos.z = ff_lerp(pos.z, (md2_player.pos.z+47.0f) + 
+			                ctrl_y_raxis() * CAMERA_VIEW_OFFSET, 0.2f);
+		
+		    pos.x = ff_lerp(pos.x, (md2_player.pos.x)+
+		                    ctrl_x_raxis() * CAMERA_VIEW_OFFSET, 0.2f);  	    
+	    }else{	   
+			pos.z = ff_lerp(pos.z, md2_player.pos.z + 47.0f, 0.2f); 
+			pos.x = ff_lerp(pos.x, md2_player.pos.x, 0.2f); 		
 		}
-	}else 
+		
+	}else
 	{
-		player.anim_select = ANIMSTATE2; 
-		if (ctrl_x_axis() != 0 || ctrl_y_axis() != 0)
+/*		if (ctrl_button(BTN_B))
 		{
-			vel.x = ctrl_x_axis()*speed*0.7f; 
-			vel.z = ctrl_y_axis()*speed*0.7f;
+			pos.y -= ctrl_y_laxis() * s; 
+		}else
+		{
+			//pos.z = (player.pos.z+47.0f) + ctrl_y_axis() * CAMERA_VIEW_OFFSET;
+			pos.z = ff_lerp(pos.z, (player.pos.z+47.0f) + ctrl_y_laxis() * CAMERA_VIEW_OFFSET, 0.2f);
+			
 		}
-	}
-	
-	//vv_add(&vel, &vel, &gra);
-	vel.x = vel.x + gra.x * time_delta_time();
-	vel.y = vel.y + gra.y * time_delta_time();
-	vel.z = vel.z + gra.z * time_delta_time();
-	vv_add(&player.pos, &player.pos, &vel);
-	//vf_mul(&vel, &vel, time_delta_time()); 
-		//printf("Vel = {%f, %f, %f}\n", vel.x, vel.y, vel.z);
-	//player.pos.x = player.pos.x + vel.x; 
-	//player.pos.y = player.pos.y + vel.y; 
-	//player.pos.z = player.pos.z + vel.z; 
-	//vv_add(&player.pos, &player.pos, &vel);
-	
-	if (player.pos.y <= 0.5f)
-	{
-		can_jump = 1; 
-		on_ground = 1; 
-		player.pos.y = 0.5f; 
-		vv_zero(&vel);
-	}else 
-	{
-		on_ground = 0; 
-	}
-	
-	posz += ctrl_y_axis(); 
-	if (ctrl_button(BTN_A))
-	{
-		roty += ctrl_y_axis();
-	}
-	
-	if (ctrl_button(BTN_B))
-	{
-		rotx += ctrl_x_axis();
-	}
-	
-	if (ctrl_button_down(BTN_Y))
-	{
-		player.pos.z = -15.0f; 
-		player.pos.y = 0.5f;
-		vv_zero(&vel);
-	}
-	
-/*	if (ctrl_button_down(BTN_X))
-	{
-		center_cam = 1;  
-		cam_target_rot = player.rot.z-90.0f; 
-		if (cam_target_rot < -360.0f) 
-			cam_target_rot = cam_target_rot + 360.0f; 
-		printf("rotx = %f | cam_target_rot = %f\n", rotx, cam_target_rot);
-	}
 */
-	if(center_cam)
+		
+		pos.z = ff_lerp(pos.z, (md2_player.pos.z+47.0f) + ctrl_y_laxis() * CAMERA_VIEW_OFFSET, 0.2f);
+		
+		//pos.x = (player.pos.x)+ctrl_x_axis() * CAMERA_VIEW_OFFSET;  
+		pos.x = ff_lerp(pos.x, (md2_player.pos.x)+ctrl_x_laxis() * CAMERA_VIEW_OFFSET, 0.2f);  
+		
+		/*if (ctrl_button(BTN_A))
+			rot.y -= s; 
+		if (ctrl_button(BTN_X))
+			rot.y += s;  */
+	}	
+	
+	//md2_player.pos = player.pos; 
+	//md2_player.rot.x = -90;//player.rot.x; 
+	//md2_player.rot.y = 0;//player.rot.y; 
+	//md2_player.rot.z = player.rot.y-90;//-player.rot.y+90; 
+	
+	
+	aabb_update(&md2_player.box, &md2_player.pos, &box_sca);
+	
+	render_cameraf(pos.x, pos.y, pos.z, rot.x, rot.y, rot.z); 
+#if 0	
+	if (ctrl_button(BTN_X))
 	{
-
-		rotx = ff_move_towards(rotx, cam_target_rot, 0.5f);
-
-		float r = fabsf(fabsf(rotx) - fabsf(cam_target_rot));
-		if (r <= 0.1f)//???? wtf
+		if (ctrl_x_laxis() != 0 || ctrl_y_laxis() != 0)
 		{
+			fpspos.x += ctrl_x_laxis() * s;
+			fpspos.z += ctrl_y_laxis() * s; 
+		}
+		
+		if (ctrl_button(BTN_Y))
+			fpspos.y += ctrl_y_laxis() * s; 
 			
-			//vv_rot_y(&dir, &cdir, DEG2RAD(player.rot.z));
-			cam_rot = cam_target_rot;
-			center_cam = 0; 
+		if (ctrl_x_raxis() != 0 || ctrl_y_raxis() != 0)
+		{
+			fpsrot.x += ctrl_x_raxis() * s; 
+			fpsrot.y += ctrl_y_raxis() * s; 
 		}
 	}
-	 
-	//cam_pos.x = player.pos.x; 
-	//cam_pos.y = -(player.pos.z)*0.35f;
-	//cam_pos.z = player.pos.z+4.0f;  
 	
-	//cam_ori.y = roty+(player.pos.z*2.5f); 
-	
-	//printf("player.pos.z = %f\n", cam_ori.y);
-	//printf("player pos = {%f, %f, %f}\n", player.pos.x, player.pos.y, player.pos.z);
-	
-	if (player.pos.x < -28.5f)
-		player.pos.x = -28.5f; 
-	
-	if (player.pos.x > 28.3f)
-		player.pos.x = 28.3f; 
-	
-		
-	if (player.pos.z < -20.5f)
-		player.pos.z = -20.5f; 
-		
-	if (player.pos.z > -13.0f)
-		player.pos.z = -13.0f; 
-	
-	//if (cam_pos.y <= 5.17f)
-		//cam_pos.y = 5.17f; 
-	cam_offset.x = player.pos.x; 
-	cam_offset.y = player.pos.y + 2.0f; 
-	cam_offset.z = player.pos.z + 4.0f;
-	
-	if (cam_offset.x < -27.0f)
-		cam_offset.x = -27.0f; 
-		
-	if (cam_offset.x > 27.0f)
-		cam_offset.x = 27.0f; 
-	
-	if (cam_offset.z > -10.25f)
-		cam_offset.z = -10.25f;
-	//vv_lerp(&cam_pos, &cam_pos, &cam_offset, 0.3f); 
-	
-	//render_cameraf(cam_pos.x, cam_pos.y, cam_pos.z, rotx, cam_ori.y, 0.0f); 
-	//render_cameraf(cam_pos.x, cam_pos.y, cam_pos.z, rotx, -30.0f, 0.0f); 
-	//render_cameraf(player.pos.x, player.pos.y+2.0f, player.pos.z+4.0f, rotx, roty, 0.0f);
-	render_cameraf(cam_offset.x, cam_offset.y, cam_offset.z, rotx, roty, 0.0f); 
-	//render_camera_lookat(player.pos.x, player.pos.y+0.7f, player.pos.z, rotx, roty, 0.0f, 3.0f);
-	
-	
-	vec4_t one_sca = {.x = 0.2f, .y = 0.3f, .z = 0.2f}; 
-	
-	if (player.box.hit)
-	{
-		ui_heart_taken();
-		mode_change(MODE_GAMEPLAY);
-	}	
-		
-	aabb_update(&player.box, &player.pos, &one_sca);
+	render_cameraf(fpspos.x, fpspos.y, fpspos.z, fpsrot.x, fpsrot.y, fpsrot.z); 
+#endif
 }
 
-void player_is_alive()
+int player_is_alive()
 {
 	if (dead)
 		return 1; 
 	return 0;
 }
+
+void player_reset()
+{
+	md2_player.pos = starting_pos; 
+	lastPos = starting_pos; 
+	printf("caught!!\n");
+	ui_cheese_reset();
+}
  
-objmd2_t* player_get_obj()
+obj_t* player_get_obj()
 {
 	return &player; 
+}
+
+objmd2_t* player_get_objmd2()
+{
+	return &md2_player; 
 }

@@ -129,6 +129,15 @@ static void vv_rot_y(vec4_t* out, vec4_t* v, float r)
 	out->z = z;  
 }
 
+static void vv_move_towards(vec4_t* out, vec4_t *v1, vec4_t* v2, float d)
+{
+	//(f1 + (f2-f1) * d); 
+	
+	out->x = v1->x + (v2->x - v1->x) * d; 
+	out->y = v1->y + (v2->y - v1->y) * d; 
+	out->z = v1->z + (v2->z - v1->z) * d; 
+}
+
 /*vector 1*/ 
 static vec4_t vv_one()
 {

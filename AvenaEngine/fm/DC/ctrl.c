@@ -33,18 +33,28 @@ int ctrl_event_quit()
 	return 0;  
 }
 
-float ctrl_x_axis()
+float ctrl_x_laxis()
 {
 	//printf("joyx %d\n", state->joyx);
 	x_axis = (abs(state->joyx) < JOYDEADZONE) ? 0 : state->joyx/128.0f; 
 	return x_axis; 
 }
 
-float ctrl_y_axis()
+float ctrl_y_laxis()
 {
 	//printf("joyy %d\n", state->joyy);
 	y_axis = (abs(state->joyy) < JOYDEADZONE) ? 0 : state->joyy/128.0f; 
 	return y_axis; 
+}
+
+float ctrl_x_raxis()
+{
+	return 0;
+}
+ 
+float ctrl_y_raxis()
+{
+	return 0; 
 }
 
 int ctrl_button(int flag)

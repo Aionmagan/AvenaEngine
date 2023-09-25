@@ -9,6 +9,10 @@
 void player_init();
 void player_start(); 
 void player_update(); 
-void player_is_alive();
-objmd2_t* player_get_obj(); 
+int player_is_alive();
+//objmd2_t* player_get_obj();
+void player_reset(); 
+ 
+obj_t* player_get_obj(); 
+objmd2_t* player_get_objmd2(); 
 #endif//__PLAYER_H__

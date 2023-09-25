@@ -7,6 +7,9 @@ SDL_Joystick* gamepad = NULL;
 SDL_Event event; 
 float x_axis = 0; 
 float y_axis = 0; 
+float x_raxis = 0; 
+float y_raxis = 0; 
+
 int quit = 0; 
 int keys[322];
 int btns[24];
@@ -26,7 +29,7 @@ int gp_keys[]=
 	111, //useless
 	111, //useless
 	111, //useless
-	111, //useless
+	4, //useless
 	1, //b button
 	3, //x button 
 	2, //y button
@@ -46,7 +49,8 @@ int pc_keys[14]=
 	SDL_SCANCODE_LEFT,
 	SDL_SCANCODE_LEFT,
 	SDL_SCANCODE_LEFT,
-	SDL_SCANCODE_E,
+	SDL_SCANCODE_SPACE,
+	SDL_SCANCODE_RIGHT
 }; 
 /*INDEXER ARRAY*/
 
@@ -149,6 +153,18 @@ void ctrl_update()
 							//printf("Jaxis Y = %f\n", event.jaxis.value/32767.0f);
 							y_axis = event.jaxis.value/32767.0f; 
 						}
+						
+						if( event.jaxis.axis == 3 )
+                		{
+							//printf("Jaxis X = %f\n", event.jaxis.value/32767.0f);
+							x_raxis = event.jaxis.value/32767.0f; 
+						}
+						
+						if( event.jaxis.axis == 4)
+						{
+							//printf("Jaxis Y = %f\n", event.jaxis.value/32767.0f);
+							y_raxis = event.jaxis.value/32767.0f; 
+						}
 						/*
 						for(int i = 0; i < 16; ++i)
 						{
@@ -192,16 +208,28 @@ int ctrl_event_quit()
 	return quit;  
 }
 
-float ctrl_x_axis()
+float ctrl_x_laxis()
 {
 	x_axis = (fabs(x_axis) < JOYDEADZONE) ? 0 : x_axis; 
 	return x_axis; 
 }
 
-float ctrl_y_axis()
+float ctrl_y_laxis()
 {
 	y_axis = (fabs(y_axis) < JOYDEADZONE) ? 0 : y_axis; 
 	return y_axis; 
+}
+
+float ctrl_x_raxis()
+{
+	x_raxis = (fabs(x_raxis) < JOYDEADZONE) ? 0 : x_raxis; 
+	return x_raxis; 
+}
+
+float ctrl_y_raxis()
+{
+	y_raxis = (fabs(y_raxis) < JOYDEADZONE) ? 0 : y_raxis; 
+	return y_raxis; 
 }
 
 int ctrl_button(int flag)

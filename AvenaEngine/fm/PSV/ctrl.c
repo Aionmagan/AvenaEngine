@@ -11,6 +11,8 @@ int last_state = 0;
 int is_down = 0; 
 float x_axis; 
 float y_axis; 
+float x_raxis; 
+float y_raxis; 
 
 void ctrl_init()
 {	
@@ -29,18 +31,32 @@ int ctrl_event_quit()
 	return 0;
 }
 
-float ctrl_x_axis()
+float ctrl_x_laxis()
 {
 	int p = pad.lx-128; 
 	x_axis = (abs(p) < JOYDEADZONE) ? 0 : p/128.0f; 
 	return x_axis; 
 }
 
-float ctrl_y_axis()
+float ctrl_y_laxis()
 {
 	int p = pad.ly-128; 
 	y_axis = (abs(p) < JOYDEADZONE) ? 0 : p/128.0f; 
 	return y_axis; 
+}
+
+float ctrl_x_raxis()
+{
+	int p = pad.rx-128; 
+	x_raxis = (abs(p) < JOYDEADZONE) ? 0 : p/128.0f; 
+	return x_raxis; 
+}
+
+float ctrl_y_raxis()
+{
+	int p = pad.ry-128; 
+	y_raxis = (abs(p) < JOYDEADZONE) ? 0 : p/128.0f; 
+	return y_raxis; 
 }
 
 int ctrl_button(int flag)
