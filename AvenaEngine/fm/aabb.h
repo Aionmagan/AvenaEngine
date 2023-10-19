@@ -26,7 +26,7 @@ void aabb_hit(aabb_t* a, aabb_t* b);
 int aabb_overlap(aabb_t* a, aabb_t* b); 
 
 /*should have it's own file but not enough time*/
-int mesh_collision(vec4_t* point, mesh_t* mesh); 
+int mesh_collision(float* yout, vec4_t* point, mesh_t* mesh); 
 
 
 #endif//__AABB_H__

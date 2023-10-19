@@ -16,7 +16,7 @@
 int load_png_texture(char* filename, tex_t* tex) 
 {
 	int ret = 0;
-	char s[40]={"/rd/"};
+	char s[88]={"/rd/"};
 	FILE * file = 0;
 	uint8_t * data = 0;
 	png_structp parser = 0;
@@ -31,35 +31,35 @@ int load_png_texture(char* filename, tex_t* tex)
     GLenum texture_format;
 	
 	strcat(s, filename); 
-printf("png file = %s\n", s);
+//printf("png file = %s\n", s);
 
 	if(!tex || !filename) {
 		CLEANUP(1);
 	}
-printf("png %s first step\n", filename);
+//printf("png %s first step\n", filename);
 
 	file = fopen(s, "rb");
 	if(!file) {
 		CLEANUP(2);
 	}
-printf("png %s second step\n", filename);
+//printf("png %s second step\n", filename);
 
 	parser = png_create_read_struct(PNG_LIBPNG_VER_STRING, 0, 0, 0);
 	if(!parser) {
 		CLEANUP(3);
 	}
-printf("png %s third step\n", filename);
+//printf("png %s third step\n", filename);
 
 	info = png_create_info_struct(parser);
 	if(!info) {
 		CLEANUP(4);
 	}
-printf("png %s fourth step\n", filename);
+//printf("png %s fourth step\n", filename);
 
 	if(setjmp(png_jmpbuf(parser))) {
 		CLEANUP(5);
 	}
-printf("png %s fifth step\n", filename);
+//printf("png %s fifth step\n", filename);
 
 	png_init_io(parser, file);
 	png_read_info(parser, info);
@@ -68,7 +68,7 @@ printf("png %s fifth step\n", filename);
 	if((w & (w-1)) || (h & (h-1)) || w < 8 || h < 8) {
 		CLEANUP(6);
 	}
-printf("png %s sixth step\n", filename);
+//printf("png %s sixth step\n", filename);
 
 	if(png_get_valid(parser, info, PNG_INFO_tRNS) || (color_type == PNG_COLOR_TYPE_GRAY && bit_depth < 8) || color_type == PNG_COLOR_TYPE_PALETTE) {
 		png_set_expand(parser);
@@ -96,7 +96,7 @@ printf("png %s sixth step\n", filename);
 
 	// set the individual row_pointers to point at the correct offsets of data
 	for(png_uint_32 i = 0; i < h; ++i) {
-		row_pointers[h - 1 - i] = data + (h-1-i) * rowbytes;
+		row_pointers[h - 1 - i] = data + i/*(h-1-i)*/ * rowbytes;
 	}
 
 	png_read_image(parser, row_pointers);
@@ -115,6 +115,9 @@ printf("texture_format = %s\n",(texture_format == GL_RGBA) ? "GL_RGBA" : "GL_RGB
 	tex->h = h;
 	//tex->format = texture_format;
 	//tex->min_filter = tex->mag_filter = GL_NEAREST;
+	//set_system_ram();
+    //print_ram_stats();
+    //print_VRAM_stats();
 printf("png %s finished loading\n", filename);
 
 cleanup:

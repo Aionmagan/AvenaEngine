@@ -4,6 +4,7 @@
 //TOP CLASSIC DELAY
 
 void menu_init(); 
+void menu_start();
 void menu_update(); 
 void menu_render(); 
 

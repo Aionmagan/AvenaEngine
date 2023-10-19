@@ -12,7 +12,12 @@ void player_update();
 int player_is_alive();
 //objmd2_t* player_get_obj();
 void player_reset(); 
- 
-obj_t* player_get_obj(); 
-objmd2_t* player_get_objmd2(); 
+int player_get_lvl();
+
+void player_push_back(vec4_t push);
+void player_lookat_door(int i);
+
+aabb_t* player_get_aabb();
+vec4_t* player_get_pos(); 
+
 #endif//__PLAYER_H__

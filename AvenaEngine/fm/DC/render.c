@@ -1,6 +1,6 @@
 #include "../render.h"
 #include "../timer.h" 
-
+#include "../ctrl.h"
 //#include <SDL2/SDL.h>
 //#include <GL/gl.h>
 //#include <GL/glu.h>
@@ -67,8 +67,16 @@ void render_init(float a, float n, float f)
     
     
     glBlendFunc(GL_SRC_ALPHA,GL_ONE_MINUS_SRC_ALPHA);
+    //glAlphaFunc(GL_NOTEQUAL, 0.0f);
     
     glEnable(GL_TEXTURE_2D);
+    
+        glShadeModel(GL_SMOOTH);
+    //glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
+        //glEnable(GL_LIGHTING);
+        //glEnable(GL_LIGHT0);
+      //  glEnable(GL_LIGHT1); 
+       // glEnable(GL_LIGHT2); 
   
   /*  
     GLdouble eyex = 0.0f, 
@@ -97,9 +105,9 @@ void render_quit()
 void render_cameraf(float tx, float ty, float tz, float rx, float ry, float rz)
 {
     glLoadIdentity(); 
-	glRotatef(-rx, 0.0f, 1.0f, 0.0f);
 	glRotatef(-ry, 1.0f, 0.0f, 0.0f);
 	glRotatef(-rz, 0.0f, 0.0f, 1.0f);  
+	glRotatef(-rx, 0.0f, 1.0f, 0.0f);
 	glTranslatef(-tx, -ty, -tz);
 }
 
@@ -123,6 +131,45 @@ void render_camera_lookat(float tx, float ty, float tz, float rx, float ry, floa
 void render_begin()
 {
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+	
+}
+
+int render_get_light(int i)
+{
+	switch(i)
+	{
+		case 0:
+			return GL_LIGHT0; 
+		case 1:
+			return GL_LIGHT1; 
+		case 2: 
+			return GL_LIGHT2; 
+		default:
+			printf("WARNING: this light %d is unsupported in this platform\n will return light 0", i);
+			return GL_LIGHT0; 
+	}
+}
+
+void render_set_light(int i, float* ambi, float* diff, float* spec) 
+{
+        /*i is assumed to have been collected from render_get_light() first*/ 
+        glLightfv(GL_LIGHT0+i, GL_AMBIENT, ambi);
+        glLightfv(GL_LIGHT0+i, GL_DIFFUSE, diff);
+        glLightfv(GL_LIGHT0+i, GL_SPECULAR, spec);
+}
+
+void render_pos_light(int i, float x, float y, float z)
+{
+	glPushMatrix();
+	glLoadIdentity();
+	static float lp[4];
+	lp[0] = x; 
+	lp[1] = y; 
+	lp[2] = z;
+	lp[3] = 1.0f;  
+	//printf("lp = {%f, %f, %f}", lp[0] = x, lp[1] = y, lp[2] = z);
+	glLightfv(GL_LIGHT0+i, GL_POSITION, lp);
+	glPopMatrix();
 }
 
 void render_ui_draw(obj_t* obj)
@@ -142,11 +189,25 @@ void render_tp_draw(obj_t* obj)
 	glDisable(GL_BLEND);
 }
 
+void render_tpmt_draw(objmt_t* obj)
+{
+	glEnable(GL_ALPHA_TEST);
+	//glEnable(GL_BLEND);
+		render_draw_mt(obj);	
+	//glDisable(GL_BLEND);
+	glDisable(GL_ALPHA_TEST);
+}
+
 void render_tp_md2(objmd2_t* obj)
 {
 	glEnable(GL_BLEND);
 		render_lerp_md2(obj);	
 	glDisable(GL_BLEND);
+}
+
+void render_wire_frame()
+{
+
 }
 
 void render_draw(obj_t* obj)
@@ -191,6 +252,142 @@ void render_draw(obj_t* obj)
 		glEnd();
 		glPopMatrix();
 		
+}
+
+void render_draw_mt(objmt_t* obj)
+{
+	//if (!wire_frame)
+	//{
+	    glPushMatrix();
+ 
+	    glTranslatef(obj->pos.x, obj->pos.y, obj->pos.z);
+	    glScalef(obj->sca.x, obj->sca.y, obj->sca.z); 
+	    glRotatef(obj->rot.x, 1.0f, 0.0f, 0.0f);
+	    glRotatef(obj->rot.y, 0.0f, 1.0f, 0.0f); 
+	    glRotatef(obj->rot.z, 0.0f, 0.0f, 1.0f); 
+	   //glRotatef(-roty, 0.0f, 0.0f, 0.0f); 
+	   //glRotatef(-rotx, 0.0f, 1.0f, 0.0f); 
+		for(int m = 0; m < obj->model->mesh_parts; ++m)
+		{
+			glMaterialfv(GL_FRONT, GL_DIFFUSE, obj->model->mats[m].diff);
+			glMaterialfv(GL_FRONT, GL_SPECULAR, obj->model->mats[m].spec);
+			//glMaterialfv(GL_FRONT, GL_AMBIENT, obj->model->mats[m].ambi);
+			glMaterialfv(GL_FRONT, GL_EMISSION, obj->model->mats[m].emit);
+			//glMaterialfv(GL_FRONT, GL_AMBIENT, obj->model->mats[m].ambi);
+			
+			glBindTexture(GL_TEXTURE_2D, obj->texture[m].tid);
+			//printf("pos {%f, %f, %f}\n", obj->sca.x, obj->sca.y, obj->sca.z);
+			glBegin(GL_TRIANGLES); 
+			glColor3f(obj->dens, obj->dens, obj->dens);
+
+			//for(int m = 0; m < obj->model->mesh_parts; ++m)
+			//{
+				//glBindTexture(GL_TEXTURE_2D, obj->texture[0].tid);
+				for(i = 0; i < obj->model->face_count[m]; ++i)
+				{				
+					//printf("vertex {%f, %f, %f}\n", obj->model->verts[m][obj->model->faces[m][i].vx].x, obj->model->verts[m][obj->model->faces[m][i].vx].y,obj->model->verts[m][obj->model->faces[m][i].vx].z);
+					glTexCoord2f(obj->model->uvs[obj->model->faces[m][i].ux].u, 
+								 obj->model->uvs[obj->model->faces[m][i].ux].v);
+								 
+					 glNormal3f(obj->model->norms[obj->model->faces[m][i].nx].x,
+								obj->model->norms[obj->model->faces[m][i].nx].y,
+								obj->model->norms[obj->model->faces[m][i].nx].z);
+								
+					 glVertex3f(obj->model->verts[obj->model->faces[m][i].vx].x,
+								obj->model->verts[obj->model->faces[m][i].vx].y,
+								obj->model->verts[obj->model->faces[m][i].vx].z);
+					
+					glTexCoord2f(obj->model->uvs[obj->model->faces[m][i].uy].u, 
+								 obj->model->uvs[obj->model->faces[m][i].uy].v);
+								
+					glNormal3f(obj->model->norms[obj->model->faces[m][i].ny].x,
+							   obj->model->norms[obj->model->faces[m][i].ny].y,
+							   obj->model->norms[obj->model->faces[m][i].ny].z);			
+								
+					 glVertex3f(obj->model->verts[obj->model->faces[m][i].vy].x,
+								obj->model->verts[obj->model->faces[m][i].vy].y,
+								obj->model->verts[obj->model->faces[m][i].vy].z);
+							   
+					glTexCoord2f(obj->model->uvs[obj->model->faces[m][i].uz].u, 
+								 obj->model->uvs[obj->model->faces[m][i].uz].v);
+								 
+					glNormal3f(obj->model->norms[obj->model->faces[m][i].nz].x,
+								obj->model->norms[obj->model->faces[m][i].nz].y,
+								obj->model->norms[obj->model->faces[m][i].nz].z);
+								
+					 glVertex3f(obj->model->verts[obj->model->faces[m][i].vz].x,
+								obj->model->verts[obj->model->faces[m][i].vz].y,
+								obj->model->verts[obj->model->faces[m][i].vz].z);
+								
+										
+				}
+			
+		glEnd();
+		}
+		glPopMatrix();
+	//}
+#if 0//defined(__DEBUG__)
+	    if (obj->wire) 
+		{
+			glPushMatrix();
+			glTranslatef(obj->pos.x, obj->pos.y, obj->pos.z);
+	    	glScalef(obj->sca.x, obj->sca.y, obj->sca.z); 
+	    	glRotatef(obj->rot.x, 1.0f, 0.0f, 0.0f);
+	    	glRotatef(obj->rot.y, 0.0f, 1.0f, 0.0f); 
+	    	glRotatef(obj->rot.z, 0.0f, 0.0f, 1.0f); 
+			glDisable(GL_TEXTURE_2D);
+			glDisable(GL_LIGHTING);
+
+			glLineWidth(4);
+			glBegin(GL_LINES);
+				
+			glColor3f(0.0f, 0.0f, 0.0f);				
+			
+			if (wire_frame)
+				glColor3f(0.6f, 0.6f, 0.6f);								
+			//if(obj->box.hit)
+				//glColor3f(1.0f, 0.0f, 0.0f); 
+			for(int m = 0; m < obj->model->mesh_parts; ++i)
+			{	
+				for(i = 0; i < obj->model->face_count[m]; ++i)
+				{
+					 glVertex3f(obj->model->verts[obj->model->faces[i].vx].x,
+								obj->model->verts[obj->model->faces[i].vx].y,
+								obj->model->verts[obj->model->faces[i].vx].z);
+								
+					 glVertex3f(obj->model->verts[obj->model->faces[i].vy].x,
+								obj->model->verts[obj->model->faces[i].vy].y,
+								obj->model->verts[obj->model->faces[i].vy].z);
+								
+					 glVertex3f(obj->model->verts[obj->model->faces[i].vy].x,
+					 		    obj->model->verts[obj->model->faces[i].vy].y,
+								obj->model->verts[obj->model->faces[i].vy].z);
+								
+					 glVertex3f(obj->model->verts[obj->model->faces[i].vz].x,
+								obj->model->verts[obj->model->faces[i].vz].y,
+								obj->model->verts[obj->model->faces[i].vz].z);
+								
+		             glVertex3f(obj->model->verts[obj->model->faces[i].vz].x,
+								obj->model->verts[obj->model->faces[i].vz].y,
+								obj->model->verts[obj->model->faces[i].vz].z);
+							
+					 glVertex3f(obj->model->verts[obj->model->faces[i].vx].x,
+								obj->model->verts[obj->model->faces[i].vx].y,
+								obj->model->verts[obj->model->faces[i].vx].z);
+				}
+			}
+			
+			glEnd();
+			glEnable(GL_TEXTURE_2D);
+			glEnable(GL_LIGHTING);
+			glPopMatrix();
+		}
+#endif 
+}
+
+void render_aabb(aabb_t* box)
+{
+
 }
 
 /*texture scroll*/ 

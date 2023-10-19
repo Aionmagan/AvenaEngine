@@ -34,6 +34,9 @@ void aabb_hit(aabb_t* a, aabb_t* b)
 
 int aabb_overlap(aabb_t* a, aabb_t* b)
 {
+	if (a->is_active == 0 || b->is_active == 0)
+		return 0; 
+		
 	return(a->max.x > b->min.x &&
     	   a->min.x < b->max.x &&
     	   a->max.y > b->min.y &&
@@ -55,7 +58,7 @@ int ptInTriangle(vec4_t p, vertex_t p0, vertex_t p1, vertex_t p2)
     return (s > 0 && t > 0 && (s + t) < 2 * A * sign);
 }
 
-int mesh_collision(vec4_t* point, mesh_t* mesh)
+int mesh_collision(float* yout, vec4_t* point, mesh_t* mesh)
 {
     int A, A1, A2, A3; 
 	float r; 
@@ -73,8 +76,10 @@ int mesh_collision(vec4_t* point, mesh_t* mesh)
 		    
 		//printf("A = %d\n", A);
 		if (A)
+		{
+			*yout = mesh->verts[mesh->faces[i].vx].y;
 			return 1; 	       		
-			
+		}
 		//printf("called \n");
 	}
 	

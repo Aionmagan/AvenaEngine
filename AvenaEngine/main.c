@@ -24,10 +24,10 @@ int main(int argc, char** argv)
 	
  	menu_init();
 	mode_init(); 
-	//selectscrn_init(); 
+	selectscrn_init(); 
 	gameplay_init(); 
 	
-	
+	audio_load_sfx("Assets/sw.wav");
 	audio_load_track("Assets/bg.wav"); 
 	audio_play_track(1, 1); 
 	
@@ -43,8 +43,11 @@ int main(int argc, char** argv)
 			audio_update();
 			ctrl_update();
 			time_update(); 
-		
-			if (ctrl_event_quit() || ctrl_button(BTN_START)) {q = 0;} 
+#if 0
+			if (ctrl_event_quit() || ctrl_button(BTN_START)) {q = 0;}
+#else
+			if (ctrl_event_quit()) {q = 0;}
+#endif 
 		
 		//start1 = now; 
 		now = time_get_tick(); 
@@ -79,6 +82,8 @@ int main(int argc, char** argv)
 					gameplay_render(); 
 					break; 
 				case MODE_MAINMENU:
+					if (mode_one_call())
+						menu_start(); 
 					menu_update(); 
 					menu_render(); 
 					break;

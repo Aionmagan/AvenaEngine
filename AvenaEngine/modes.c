@@ -6,7 +6,7 @@ void mode_init()
 {
 	modes = MODE_GAMEPLAY;
 	//modes = MODE_MAINMENU; 
-	//modes=MODE_SELECTSCRN; 
+	//modes = MODE_SELECTSCRN; 
 } 
 void mode_change(int flag)
 {

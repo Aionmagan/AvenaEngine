@@ -26,6 +26,17 @@ typedef struct
 	float dens; //color density;  
 }obj_t; 
 
+typedef struct
+{
+	meshmt_t* model;
+	tex_t texture[200]; 
+	vec4_t pos; 
+	vec4_t rot; 
+	vec4_t sca;
+	int wire; //collider 
+	float dens; //color density;  
+}objmt_t; 
+
 typedef struct 
 {
 	modelData_t* model;
@@ -43,6 +54,7 @@ typedef struct
 }objmd2_t; 
 
 void obj_init(obj_t* obj);
+void objmt_init(objmt_t* obj);
 void objmd2_init(objmd2_t* obj, char* model, char* texture);
 
 #endif//__OBJ_H__

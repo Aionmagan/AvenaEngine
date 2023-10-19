@@ -1,5 +1,4 @@
 #include "ui.h"
-#include "cheese.h"
 #include "../fm/pngloader.h"
 #include "../fw.h"
 #include "../modes.h"
@@ -23,7 +22,7 @@ void ui_init()
     for(int i = 0; i < MAX_CHEESES; i++){
 	obj_init(&cheeses[i]);
 	cheeses[i].model = &model_ui;
-    cheeses[i].texture = cheese_get_obj()->texture;
+    //cheeses[i].texture = cheese_get_obj()->texture;
     cheeses[i].sca.x = 0.02f; 
 	cheeses[i].sca.y = 0.02f; 
 	cheeses[i].sca.z = 0.02f;

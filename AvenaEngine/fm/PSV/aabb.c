@@ -26,6 +26,9 @@ void aabb_hit(aabb_t* a, aabb_t* b)
 
 int aabb_overlap(aabb_t* a, aabb_t* b)
 {
+	if (a->is_active == 0 || b->is_active == 0)
+		return 0; 
+		
 	return(a->max.x > b->min.x &&
     	   a->min.x < b->max.x &&
     	   a->max.y > b->min.y &&
