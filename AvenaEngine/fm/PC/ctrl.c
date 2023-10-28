@@ -1,7 +1,16 @@
 #include "../ctrl.h"
+#include "../timer.h"
 //#include <SDL2/SDL.h>
 
-#define JOYDEADZONE 0.1 
+#if defined(__WIN_P__)
+#define JOYPORT_RAY 3
+#define JOYPORT_RAX 2
+#else 
+#define JOYPORT_RAY 4
+#define JOYPORT_RAX 3
+#endif 
+
+#define JOYDEADZONE 0.1
 
 SDL_Joystick* gamepad = NULL; 
 SDL_Event event; 
@@ -10,6 +19,7 @@ float y_axis = 0;
 float x_raxis = 0; 
 float y_raxis = 0; 
 
+int is_joystick = 0;
 int quit = 0; 
 int keys[322];
 int btns[24];
@@ -56,6 +66,7 @@ int pc_keys[14]=
 
 void ctrl_init()
 {	
+	SDL_SetRelativeMouseMode(1); 
 	for(int i = 0; i < 322; ++i)
 	{	
 		keys[i] = 0; 
@@ -87,7 +98,17 @@ void ctrl_update()
 			case SDL_QUIT:
 				quit = 1; 
 				break; 
+			case SDL_MOUSEMOTION: 
+				is_joystick = 0;
+				//x_raxis = ff_lerp(event.motion.xrel, 0, 0.3f);
+				//x_raxis = ff_lerp(event.motion.yrel, 0, 0.3f); 
+				x_raxis = event.motion.xrel*12*time_delta_time(); 
+				y_raxis = event.motion.yrel*12*time_delta_time(); 
+				//x_raxis = ff_lerp(x_raxis, 0, 0.3f);
+				//y_raxis = ff_lerp(y_raxis, 0, 0.3f); 
+				break; 
 			case SDL_KEYDOWN: 
+				is_joystick = 0; 
 				if (event.key.repeat == 0)
 					keys[event.key.keysym.scancode] = 1; 
 					skeys[event.key.keysym.scancode] = 1; 
@@ -103,6 +124,7 @@ void ctrl_update()
 					
 				break; 
 			case SDL_KEYUP: 
+				is_joystick = 0; 
 					keys[event.key.keysym.scancode] = 0;
 					skeys[event.key.keysym.scancode] = 0; 
 					if (event.key.keysym.scancode == SDL_SCANCODE_A && x_axis < 0.0f)
@@ -117,6 +139,7 @@ void ctrl_update()
 				break;
 				
 			case SDL_JOYBUTTONDOWN: 
+				is_joystick = 1; 
 					//printf("Joy Button Pressed %d\n", event.jbutton.button); 
 
 					if (event.jbutton.button < 7)
@@ -126,6 +149,7 @@ void ctrl_update()
 					}
 				break; 
 			case SDL_JOYBUTTONUP: 
+				is_joystick = 1; 
 					//printf("Joy Button Pressed %d\n", event.jbutton.button); 
 					
 					if (event.jbutton.button < 7)
@@ -140,6 +164,7 @@ void ctrl_update()
 				break;
 				
 			case SDL_JOYAXISMOTION:
+				is_joystick = 1;
 			  		if( event.jaxis.which == 0 )
               		{                        
                 		if( event.jaxis.axis == 0 )
@@ -154,13 +179,13 @@ void ctrl_update()
 							y_axis = event.jaxis.value/32767.0f; 
 						}
 						
-						if( event.jaxis.axis == 3 )
+						if( event.jaxis.axis == JOYPORT_RAX )
                 		{
 							//printf("Jaxis X = %f\n", event.jaxis.value/32767.0f);
 							x_raxis = event.jaxis.value/32767.0f; 
 						}
 						
-						if( event.jaxis.axis == 4)
+						if( event.jaxis.axis == JOYPORT_RAY)
 						{
 							//printf("Jaxis Y = %f\n", event.jaxis.value/32767.0f);
 							y_raxis = event.jaxis.value/32767.0f; 
@@ -175,6 +200,7 @@ void ctrl_update()
 					}
 				break;
 			case SDL_JOYHATMOTION:
+				is_joystick = 1; 
 					if (event.jhat.which == 0)
 					{
 						if (event.jhat.hat == 0)
@@ -222,14 +248,24 @@ float ctrl_y_laxis()
 
 float ctrl_x_raxis()
 {
-	x_raxis = (fabs(x_raxis) < JOYDEADZONE) ? 0 : x_raxis; 
-	return x_raxis; 
+	float x = x_raxis; 
+	if (is_joystick)
+		x_raxis = (fabs(x_raxis) < JOYDEADZONE) ? 0 : x_raxis; 
+	else
+		x_raxis = 0;
+		  
+	return x; 
 }
 
 float ctrl_y_raxis()
 {
-	y_raxis = (fabs(y_raxis) < JOYDEADZONE) ? 0 : y_raxis; 
-	return y_raxis; 
+	float y = y_raxis; 
+	if (is_joystick)
+		y = (fabs(y_raxis) < JOYDEADZONE) ? 0 : y_raxis;  
+	else 
+		y_raxis = 0;
+		
+	return y; 
 }
 
 int ctrl_button(int flag)

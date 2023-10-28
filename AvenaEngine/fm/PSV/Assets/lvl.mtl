@@ -1,5 +1,16 @@
 # Blender MTL File: 'monsterlvl.blend'
-# Material Count: 10
+# Material Count: 20
+
+newmtl Basement_roof
+Ns 225.000000
+Ka 1.000000 1.000000 1.000000
+Kd 0.800000 0.800000 0.800000
+Ks 0.000000 0.000000 0.000000
+Ke 0.000000 0.000000 0.000000
+Ni 1.450000
+d 1.000000
+illum 1
+map_Kd stairs_celing_walls.png
 
 newmtl FloorLvl2
 Ns 225.000000
@@ -16,11 +27,11 @@ newmtl LVL2_roof
 Ns 225.000000
 Ka 1.000000 1.000000 1.000000
 Kd 0.800000 0.800000 0.800000
-Ks 0.500000 0.500000 0.500000
+Ks 0.000000 0.000000 0.000000
 Ke 0.000000 0.000000 0.000000
 Ni 1.450000
 d 1.000000
-illum 2
+illum 1
 map_Kd celing_2nd_lvl.png
 
 newmtl basement2_floor
@@ -45,6 +56,39 @@ d 1.000000
 illum 2
 map_Kd basement_walls.png
 
+newmtl basement_walls_s1
+Ns 225.000000
+Ka 1.000000 1.000000 1.000000
+Kd 0.800000 0.800000 0.800000
+Ks 0.000000 0.000000 0.000000
+Ke 0.000000 0.000000 0.000000
+Ni 1.450000
+d 1.000000
+illum 1
+map_Kd basement_walls_s1.png
+
+newmtl basement_walls_s1.001
+Ns 225.000000
+Ka 1.000000 1.000000 1.000000
+Kd 0.800000 0.800000 0.800000
+Ks 0.000000 0.000000 0.000000
+Ke 0.000000 0.000000 0.000000
+Ni 1.450000
+d 1.000000
+illum 1
+map_Kd basement_walls_s2.png
+
+newmtl exit_way
+Ns 225.000000
+Ka 1.000000 1.000000 1.000000
+Kd 0.800000 0.800000 0.800000
+Ks 0.000000 0.000000 0.000000
+Ke 0.000000 0.000000 0.000000
+Ni 1.450000
+d 1.000000
+illum 1
+map_Kd Black.png
+
 newmtl lvl1_floor
 Ns 225.000000
 Ka 1.000000 1.000000 1.000000
@@ -65,7 +109,7 @@ Ke 0.000000 0.000000 0.000000
 Ni 1.450000
 d 1.000000
 illum 1
-map_Kd VHS_Shop/Textures/Concrete_02.png
+map_Kd 1st_floor_celing.png
 
 newmtl lvl1_walls
 Ns 225.000000
@@ -78,6 +122,28 @@ d 1.000000
 illum 1
 map_Kd wall_1st_floor.png
 
+newmtl lvl1_walls_s1
+Ns 225.000000
+Ka 1.000000 1.000000 1.000000
+Kd 0.800000 0.800000 0.800000
+Ks 0.000000 0.000000 0.000000
+Ke 0.000000 0.000000 0.000000
+Ni 1.450000
+d 1.000000
+illum 1
+map_Kd wall_1st_floor_s1.png
+
+newmtl lvl1_walls_s2
+Ns 225.000000
+Ka 1.000000 1.000000 1.000000
+Kd 0.800000 0.800000 0.800000
+Ks 0.000000 0.000000 0.000000
+Ke 0.000000 0.000000 0.000000
+Ni 1.450000
+d 1.000000
+illum 1
+map_Kd wall_1st_floor_s2.png
+
 newmtl lvl2_walls
 Ns 225.000000
 Ka 1.000000 1.000000 1.000000
@@ -89,6 +155,61 @@ d 1.000000
 illum 1
 map_Kd 2nd_level_walls1.png
 
+newmtl lvl2_walls_s1
+Ns 225.000000
+Ka 1.000000 1.000000 1.000000
+Kd 0.800000 0.800000 0.800000
+Ks 0.000000 0.000000 0.000000
+Ke 0.000000 0.000000 0.000000
+Ni 1.450000
+d 1.000000
+illum 1
+map_Kd 2nd_level_walls1_s1.png
+
+newmtl lvl2_walls_s2
+Ns 225.000000
+Ka 1.000000 1.000000 1.000000
+Kd 0.800000 0.800000 0.800000
+Ks 0.000000 0.000000 0.000000
+Ke 0.000000 0.000000 0.000000
+Ni 1.450000
+d 1.000000
+illum 1
+map_Kd 2nd_level_walls1_s2.png
+
+newmtl stair_case
+Ns 225.000000
+Ka 1.000000 1.000000 1.000000
+Kd 0.800000 0.800000 0.800000
+Ks 0.000000 0.000000 0.000000
+Ke 0.000000 0.000000 0.000000
+Ni 1.450000
+d 1.000000
+illum 1
+map_Kd celing_2nd_lvl1.png
+
+newmtl stair_case_s1
+Ns 225.000000
+Ka 1.000000 1.000000 1.000000
+Kd 0.800000 0.800000 0.800000
+Ks 0.000000 0.000000 0.000000
+Ke 0.000000 0.000000 0.000000
+Ni 1.450000
+d 1.000000
+illum 1
+map_Kd celing_2nd_lvl1_s1.png
+
+newmtl stair_case_s2
+Ns 225.000000
+Ka 1.000000 1.000000 1.000000
+Kd 0.800000 0.800000 0.800000
+Ks 0.000000 0.000000 0.000000
+Ke 0.000000 0.000000 0.000000
+Ni 1.450000
+d 1.000000
+illum 1
+map_Kd celing_2nd_lvl1_s2.png
+
 newmtl stare
 Ns 225.000000
 Ka 1.000000 1.000000 1.000000
@@ -99,14 +220,3 @@ Ni 1.450000
 d 1.000000
 illum 1
 map_Kd stairs.png
-
-newmtl stare_walls
-Ns 225.000000
-Ka 1.000000 1.000000 1.000000
-Kd 0.800000 0.800000 0.800000
-Ks 0.000000 0.000000 0.000000
-Ke 0.000000 0.000000 0.000000
-Ni 1.450000
-d 1.000000
-illum 1
-map_Kd VHS_Shop/Textures/Wood.png

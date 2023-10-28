@@ -43,7 +43,7 @@ int main(int argc, char** argv)
 			audio_update();
 			ctrl_update();
 			time_update(); 
-#if 0
+#if 1
 			if (ctrl_event_quit() || ctrl_button(BTN_START)) {q = 0;}
 #else
 			if (ctrl_event_quit()) {q = 0;}
