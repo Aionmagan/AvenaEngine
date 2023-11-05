@@ -6,3 +6,12 @@
 *.velf
 *.elf
 *.blend
+*.cdi 
+
+#junk directory 
+AvenaEngine/fm/DC/romdisk/Assets
+AvenaEngine/fm/PC/Assets
+AvenaEngine/fm/PSP/Assets
+AvenaEngine/fm/PSP/TopClassic
+AvenaEngine/fm/PSP/TopClassicPlaigarized
+AvenaEngine/fm/PSV/Assets
