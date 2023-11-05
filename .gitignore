@@ -6,7 +6,10 @@
 *.velf
 *.elf
 *.blend
+*.blend1
 *.cdi 
+*.mtl
+*.obj
 
 #junk directory 
 AvenaEngine/fm/DC/romdisk/Assets
