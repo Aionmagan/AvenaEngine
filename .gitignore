@@ -1,3 +1,5 @@
 #junk files 
 *.o 
 *.zip
+*.vpk
+*.elf

@@ -1,7 +1,7 @@
 TARGET := $(GAME_NAME)
 OBJS := ctrl.o render.o mesh.o obj.o pngloader.o aabb.o audio.o timer.o $(OBJ)
 
-CFLAGS = -O2 -Wall -D__PSP__=1
+CFLAGS = -O2 -Wall -Wno-unused-function -D__PSP__=1
 ASFLAGS = $(CFLAGS)
 
 LIBS = -lpng -lz -lpspgum -lpspgu

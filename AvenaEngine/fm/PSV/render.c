@@ -1,4 +1,5 @@
 #include "../render.h"
+#include "../timer.h"
 
 #include <vitaGL.h>
 #include <math.h>
@@ -74,9 +75,11 @@ void render_quit()
 void render_cameraf(float tx, float ty, float tz, float rx, float ry, float rz)
 {
     glLoadIdentity(); 
-	glRotatef(-rx, 0.0f, 1.0f, 0.0f);
+    //glTranslatef(-tx, -ty, -tz);
 	glRotatef(-ry, 1.0f, 0.0f, 0.0f);
 	glRotatef(-rz, 0.0f, 0.0f, 1.0f);  
+	glRotatef(-rx, 0.0f, 1.0f, 0.0f);
+	
 	glTranslatef(-tx, -ty, -tz);
 }
 
@@ -84,6 +87,17 @@ void render_camerav(vec4_t* pos, vec4_t* rot)
 {
 	render_cameraf(pos->x, pos->y, pos->z, rot->x, rot->y, rot->z);
 }
+
+void render_camera_lookat(float tx, float ty, float tz, float rx, float ry, float rz, float d)
+{
+	glLoadIdentity();
+	//glTranslatef(-tx, -ty, -tz-6.0f);
+	glTranslatef(0.0f, 0.0f, -d);
+	glRotatef(-rx, 0.0f, 1.0f, 0.0f);
+	//glTranslatef(tx, ty, tz);
+	glTranslatef(-tx, -ty, -tz);
+}
+
 
 void render_begin()
 {
@@ -155,6 +169,138 @@ void render_draw(obj_t* obj)
 			}
 		glEnd();
 		glPopMatrix();
+}
+
+
+void render_draw_mt(objmt_t* obj)
+{
+	//if (!wire_frame)
+	{
+	    glPushMatrix();
+ 
+	    glTranslatef(obj->pos.x, obj->pos.y, obj->pos.z);
+	    glScalef(obj->sca.x, obj->sca.y, obj->sca.z); 
+	    glRotatef(obj->rot.x, 1.0f, 0.0f, 0.0f);
+	    glRotatef(obj->rot.y, 0.0f, 1.0f, 0.0f); 
+	    glRotatef(obj->rot.z, 0.0f, 0.0f, 1.0f); 
+	   //glRotatef(-roty, 0.0f, 0.0f, 0.0f); 
+	   //glRotatef(-rotx, 0.0f, 1.0f, 0.0f); 
+		for(int m = 0; m < obj->model->mesh_parts; ++m)
+		{
+			glMaterialfv(GL_FRONT, GL_DIFFUSE, obj->model->mats[m].diff);
+			glMaterialfv(GL_FRONT, GL_SPECULAR, obj->model->mats[m].spec);
+			//glMaterialfv(GL_FRONT, GL_AMBIENT, obj->model->mats[m].ambi);
+			glMaterialfv(GL_FRONT, GL_EMISSION, obj->model->mats[m].emit);
+			//glMaterialfv(GL_FRONT, GL_AMBIENT, obj->model->mats[m].ambi);
+			
+			glBindTexture(GL_TEXTURE_2D, obj->texture[m].tid);
+			//printf("pos {%f, %f, %f}\n", obj->sca.x, obj->sca.y, obj->sca.z);
+			glBegin(GL_TRIANGLES); 
+			glColor3f(obj->dens, obj->dens, obj->dens);
+
+			//for(int m = 0; m < obj->model->mesh_parts; ++m)
+			//{
+				//glBindTexture(GL_TEXTURE_2D, obj->texture[0].tid);
+				for(i = 0; i < obj->model->face_count[m]; ++i)
+				{				
+					//printf("vertex {%f, %f, %f}\n", obj->model->verts[m][obj->model->faces[m][i].vx].x, obj->model->verts[m][obj->model->faces[m][i].vx].y,obj->model->verts[m][obj->model->faces[m][i].vx].z);
+					glTexCoord2f(obj->model->uvs[obj->model->faces[m][i].ux].u, 
+								 obj->model->uvs[obj->model->faces[m][i].ux].v);
+								 
+					 glNormal3f(obj->model->norms[obj->model->faces[m][i].nx].x,
+								obj->model->norms[obj->model->faces[m][i].nx].y,
+								obj->model->norms[obj->model->faces[m][i].nx].z);
+								
+					 glVertex3f(obj->model->verts[obj->model->faces[m][i].vx].x,
+								obj->model->verts[obj->model->faces[m][i].vx].y,
+								obj->model->verts[obj->model->faces[m][i].vx].z);
+					
+					glTexCoord2f(obj->model->uvs[obj->model->faces[m][i].uy].u, 
+								 obj->model->uvs[obj->model->faces[m][i].uy].v);
+								
+					glNormal3f(obj->model->norms[obj->model->faces[m][i].ny].x,
+							   obj->model->norms[obj->model->faces[m][i].ny].y,
+							   obj->model->norms[obj->model->faces[m][i].ny].z);			
+								
+					 glVertex3f(obj->model->verts[obj->model->faces[m][i].vy].x,
+								obj->model->verts[obj->model->faces[m][i].vy].y,
+								obj->model->verts[obj->model->faces[m][i].vy].z);
+							   
+					glTexCoord2f(obj->model->uvs[obj->model->faces[m][i].uz].u, 
+								 obj->model->uvs[obj->model->faces[m][i].uz].v);
+								 
+					glNormal3f(obj->model->norms[obj->model->faces[m][i].nz].x,
+								obj->model->norms[obj->model->faces[m][i].nz].y,
+								obj->model->norms[obj->model->faces[m][i].nz].z);
+								
+					 glVertex3f(obj->model->verts[obj->model->faces[m][i].vz].x,
+								obj->model->verts[obj->model->faces[m][i].vz].y,
+								obj->model->verts[obj->model->faces[m][i].vz].z);
+								
+										
+				}
+			
+		glEnd();
+		}
+		glPopMatrix();
+	}
+#if 0//defined(__DEBUG__)
+	    if (obj->wire) 
+		{
+			glPushMatrix();
+			glTranslatef(obj->pos.x, obj->pos.y, obj->pos.z);
+	    	glScalef(obj->sca.x, obj->sca.y, obj->sca.z); 
+	    	glRotatef(obj->rot.x, 1.0f, 0.0f, 0.0f);
+	    	glRotatef(obj->rot.y, 0.0f, 1.0f, 0.0f); 
+	    	glRotatef(obj->rot.z, 0.0f, 0.0f, 1.0f); 
+			glDisable(GL_TEXTURE_2D);
+			glDisable(GL_LIGHTING);
+
+			glLineWidth(4);
+			glBegin(GL_LINES);
+				
+			glColor3f(0.0f, 0.0f, 0.0f);				
+			
+			if (wire_frame)
+				glColor3f(0.6f, 0.6f, 0.6f);								
+			//if(obj->box.hit)
+				//glColor3f(1.0f, 0.0f, 0.0f); 
+			for(int m = 0; m < obj->model->mesh_parts; ++i)
+			{	
+				for(i = 0; i < obj->model->face_count[m]; ++i)
+				{
+					 glVertex3f(obj->model->verts[obj->model->faces[i].vx].x,
+								obj->model->verts[obj->model->faces[i].vx].y,
+								obj->model->verts[obj->model->faces[i].vx].z);
+								
+					 glVertex3f(obj->model->verts[obj->model->faces[i].vy].x,
+								obj->model->verts[obj->model->faces[i].vy].y,
+								obj->model->verts[obj->model->faces[i].vy].z);
+								
+					 glVertex3f(obj->model->verts[obj->model->faces[i].vy].x,
+					 		    obj->model->verts[obj->model->faces[i].vy].y,
+								obj->model->verts[obj->model->faces[i].vy].z);
+								
+					 glVertex3f(obj->model->verts[obj->model->faces[i].vz].x,
+								obj->model->verts[obj->model->faces[i].vz].y,
+								obj->model->verts[obj->model->faces[i].vz].z);
+								
+		             glVertex3f(obj->model->verts[obj->model->faces[i].vz].x,
+								obj->model->verts[obj->model->faces[i].vz].y,
+								obj->model->verts[obj->model->faces[i].vz].z);
+							
+					 glVertex3f(obj->model->verts[obj->model->faces[i].vx].x,
+								obj->model->verts[obj->model->faces[i].vx].y,
+								obj->model->verts[obj->model->faces[i].vx].z);
+				}
+			}
+			
+			glEnd();
+			glEnable(GL_TEXTURE_2D);
+			glEnable(GL_LIGHTING);
+			glPopMatrix();
+		}
+#endif 
 }
 
 /*texture scroll*/ 

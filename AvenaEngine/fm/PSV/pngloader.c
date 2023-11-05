@@ -82,7 +82,7 @@ int load_png_texture(char* filename, tex_t* tex)
 
 	// set the individual row_pointers to point at the correct offsets of data
 	for(png_uint_32 i = 0; i < h; ++i) {
-		row_pointers[h - 1 - i] = data + (h-1-i) * rowbytes;
+		row_pointers[h - 1 - i] = data + (i) * rowbytes;
 	}
 
 	png_read_image(parser, row_pointers);

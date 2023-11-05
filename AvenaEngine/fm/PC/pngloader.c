@@ -13,7 +13,7 @@
 #if defined(__WIN32__)
 	typedef char uint8_t;
 #endif
-
+int printOnce = 1; 
 int load_png_texture(char* filename, tex_t* tex) 
 {
 	int ret = 0;
@@ -107,7 +107,17 @@ printf("texture_format = %s\n",(texture_format == GL_RGBA) ? "GL_RGBA" : "GL_RGB
 	tex->h = h;
 	//tex->format = texture_format;
 	//tex->min_filter = tex->mag_filter = GL_NEAREST;
-
+	if (printOnce)
+	{
+	FILE* test; 
+	
+	test = fopen("test.txt", "w+");
+	printOnce = 0; 
+	for (int i = 0; i < h*w*4; i+=4)
+		fprintf(test, "rgba {%d, %d, %d, %d} i = %d\n",data[i+0], data[i+1], data[i+2], data[i+3], i); 
+		//printf("rgba {%d, %d, %d, %d}\n",data[i+0], data[i+1], data[i+2], data[i+3]);
+	fclose(test); 
+	}
 
 cleanup:
 	if(parser) {

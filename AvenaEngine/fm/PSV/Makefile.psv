@@ -2,7 +2,7 @@ SAMPLE_NUM	:= 5
 SAMPLE_NUM_ID := 005
 TITLEID := WTJ002301
 TARGET		:= $(GAME_NAME)
-GNAME :=TopClassicPlaigarized
+GNAME :=$(TARGET)
 SOURCES		:= .
 			
 INCLUDES	:= include
