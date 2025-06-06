@@ -1,5 +1,4 @@
 # AvenaEngine
 AvenaEngine a game engine for WTJ!!! 2023
 
-Credits: 
-  por que Leo lo dijo
+this engine was build in a month just for this WTJ23 event
